@@ -22,6 +22,7 @@
 - [ ] `scripts/tsc-staged.sh` exists and type-checks only staged `.ts/.tsx` files
 - [ ] `tsc-staged.sh` prefers `tsgo` over `tsc` when available
 - [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files
+- [ ] `lint-staged` config runs `cspell lint --no-must-find-files` on `*.{md,mdx}` files (if spellcheck module is active)
 - [ ] Commit-msg hook auto-trims trailing whitespace from the first line
 - [ ] Commit-msg hook auto-lowercases the first letter after the `type(scope): ` prefix
 - [ ] Pre-commit includes gitleaks secret scanning (graceful degradation if not installed)
@@ -35,9 +36,11 @@
    ```json
    "lint-staged": {
      "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
-     "*.{ts,tsx}": ["node scripts/check-no-emoji.mjs", "bash scripts/tsc-staged.sh"]
+     "*.{ts,tsx}": ["node scripts/check-no-emoji.mjs", "bash scripts/tsc-staged.sh"],
+     "*.{md,mdx}": "cspell lint --no-must-find-files"
    }
    ```
+   Note: The `*.{md,mdx}` cspell rule is only needed when the spellcheck module is active.
 5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
    The script scans added lines in `git diff --cached` for raw emoji and fails if any are found.
    Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.

@@ -1,0 +1,3 @@
+# Project-specific words for cspell
+# Add one word per line. Lines starting with # are comments.
+# This file is loaded by cspell.json via the "project-words" dictionary.

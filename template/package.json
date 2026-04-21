@@ -16,7 +16,8 @@
     "test:e2e:ui": "playwright test --ui",
     "email:dev": "email dev",
     "gen:types": "supabase gen types typescript --linked > src/types/database.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
@@ -52,6 +53,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "husky": "^9.1.0",
     "jsdom": "^29.0.0",
+    "cspell": "^10.0.0",
     "lint-staged": "^15.2.0",
     "playwright": "^1.59.0",
     "react-email": "^3.0.0",
@@ -64,6 +66,7 @@
     "*.{ts,tsx}": [
       "node scripts/check-no-emoji.mjs",
       "bash scripts/tsc-staged.sh"
-    ]
+    ],
+    "*.{md,mdx}": "cspell lint --no-must-find-files"
   }
 }
