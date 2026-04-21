@@ -7,6 +7,7 @@
 - [ ] `.husky/pre-commit` exists and runs lint-staged
 - [ ] `lint-staged` config runs `biome check --write` on staged files
 - [ ] `lint-staged` config runs emoji guard (`check-no-emoji.mjs`) on `*.{ts,tsx}` files
+- [ ] Emoji guard scans only added lines in `git diff --cached`, not whole files (safe for legacy codebases)
 - [ ] `package.json` has `"prepare": "husky"` script
 - [ ] Pre-commit includes large file guard (250-line warning, configurable)
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
@@ -38,7 +39,7 @@
    }
    ```
 5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
-   The script scans for raw emoji characters and fails if any are found.
+   The script scans added lines in `git diff --cached` for raw emoji and fails if any are found.
    Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.
 6. Copy `.husky/large-files-allowlist.txt` from this module (add project-specific patterns as needed)
 7. Ensure `"prepare": "husky"` is in `package.json` scripts
