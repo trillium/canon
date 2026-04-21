@@ -20,7 +20,35 @@
         "useButtonType": "warn",
         "useHeadingContent": "warn",
         "useHtmlLang": "warn",
-        "useValidAriaRole": "warn"
+        "useValidAriaRole": "warn",
+        "noLabelWithoutControl": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useKeyWithClickEvents": "warn",
+        "useSemanticElements": "warn",
+        "useValidAnchor": "warn",
+        "useAnchorContent": "warn"
+      },
+      "correctness": {
+        "noUnusedImports": "warn",
+        "useExhaustiveDependencies": "warn",
+        "useHookAtTopLevel": "warn",
+        "noInvalidUseBeforeDeclaration": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "warn"
+      },
+      "style": {
+        "useConst": "error",
+        "useImportType": "warn",
+        "noNonNullAssertion": "warn"
+      },
+      "complexity": {
+        "noUselessFragments": "warn",
+        "noCommaOperator": "warn"
+      },
+      "performance": {
+        "noImgElement": "warn"
       },
       "security": {
         "noDangerouslySetInnerHtml": "error"
@@ -56,5 +84,17 @@
       ".vercel",
       "supabase/.temp"
     ]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["*.test.ts", "*.test.tsx", "**/__tests__/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    }
+  ]
 }
