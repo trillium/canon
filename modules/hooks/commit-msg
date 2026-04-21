@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+COMMIT_MSG_FILE="$1"
+MSG=$(head -1 "$COMMIT_MSG_FILE")
+
+# --- Conventional commit validation ---
+# Semantic commit pattern: type(optional-scope): description
+# Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, init
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert|init)(\([a-z0-9 ,_-]+\))?: .{1,100}"
+
+if ! echo "$MSG" | grep -qE "$pattern"; then
+  echo ""
+  echo "ERROR: Commit message does not follow conventional commit format."
+  echo ""
+  echo "  Format: <type>(<scope>): <description>"
+  echo ""
+  echo "  Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, init"
+  echo "  Scope: optional, lowercase (e.g. auth, db, ui)"
+  echo ""
+  echo "  Examples:"
+  echo "    feat(auth): add magic link sign-in"
+  echo "    fix(db): correct RLS policy for expenses"
+  echo "    docs: update implementation plan"
+  echo "    chore(deps): bump next to 16.1"
+  echo ""
+  echo "  Your message: \"$MSG\""
+  echo ""
+  exit 1
+fi

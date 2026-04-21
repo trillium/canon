@@ -12,6 +12,9 @@
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
 - [ ] Pre-commit includes lock file guard (rejects `package-lock.json`, `yarn.lock`, `bun.lockb`)
 - [ ] Pre-commit includes Next.js 16 convention guard (blocks `middleware.ts`, protects `proxy.ts`)
+- [ ] `.husky/commit-msg` exists and validates conventional commit format (`type(scope): description`)
+- [ ] Commit-msg hook uses zero dependencies (simple regex, no commitlint)
+- [ ] Valid commit types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, init
 
 ## Apply
 
@@ -30,6 +33,7 @@
    Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.
 6. Copy `.husky/large-files-allowlist.txt` from this module (add project-specific patterns as needed)
 7. Ensure `"prepare": "husky"` is in `package.json` scripts
+8. Copy `.husky/commit-msg` from this module
 
 ## Conflicts
 
