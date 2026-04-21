@@ -58,7 +58,7 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 ### Auth
 - Supabase Auth with SSR pattern
 - Magic link, OAuth (Google), password flows
-- Middleware-based session refresh
+- Proxy-based session refresh (`src/proxy.ts`)
 
 ### Database
 - Supabase PostgreSQL
