@@ -1,6 +1,66 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Primary color palette — semantic tokens with full scale */
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-primary-950: #042f2e;
+  --color-primary: var(--color-primary-800);
+
+  /* Secondary color palette */
+  --color-secondary-50: #eff6ff;
+  --color-secondary-100: #dbeafe;
+  --color-secondary-200: #bfdbfe;
+  --color-secondary-300: #93c5fd;
+  --color-secondary-400: #60a5fa;
+  --color-secondary-500: #3b82f6;
+  --color-secondary-600: #2563eb;
+  --color-secondary-700: #1d4ed8;
+  --color-secondary-800: #1e40af;
+  --color-secondary-900: #1e3a8a;
+  --color-secondary-950: #172554;
+  --color-secondary: var(--color-secondary-500);
+}
+
+/* Dark mode palette inversion — same token names, reversed values.
+   Components use e.g. text-primary-800 and get the right shade in both modes. */
+.dark {
+  --color-primary-50: #042f2e;
+  --color-primary-100: #134e4a;
+  --color-primary-200: #115e59;
+  --color-primary-300: #0f766e;
+  --color-primary-400: #0d9488;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #2dd4bf;
+  --color-primary-700: #5eead4;
+  --color-primary-800: #99f6e4;
+  --color-primary-900: #ccfbf1;
+  --color-primary-950: #f0fdfa;
+  --color-primary: var(--color-primary-200);
+
+  --color-secondary-50: #172554;
+  --color-secondary-100: #1e3a8a;
+  --color-secondary-200: #1e40af;
+  --color-secondary-300: #1d4ed8;
+  --color-secondary-400: #2563eb;
+  --color-secondary-500: #3b82f6;
+  --color-secondary-600: #60a5fa;
+  --color-secondary-700: #93c5fd;
+  --color-secondary-800: #bfdbfe;
+  --color-secondary-900: #dbeafe;
+  --color-secondary-950: #eff6ff;
+  --color-secondary: var(--color-secondary-300);
+}
 
 :root {
   --background: oklch(1 0 0);
