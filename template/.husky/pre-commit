@@ -2,6 +2,19 @@
 
 pnpm exec lint-staged
 
+# --- Lock file guard ---
+# Rejects lock files from the wrong package manager. Canon uses pnpm.
+WRONG_LOCKS="package-lock.json yarn.lock bun.lockb"
+STAGED=$(git diff --cached --name-only)
+for lockfile in $WRONG_LOCKS; do
+  if echo "$STAGED" | grep -qx "$lockfile"; then
+    echo "error: $lockfile was staged but this project uses pnpm."
+    echo "  Run: git rm --cached $lockfile"
+    echo "  (You may also want to add it to .gitignore)"
+    exit 1
+  fi
+done
+
 # --- Large file guard (warning only) ---
 # Flags staged files over 250 lines to encourage decomposition.
 # Allowlist: .husky/large-files-allowlist.txt (one glob per line)

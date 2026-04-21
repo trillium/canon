@@ -10,6 +10,7 @@
 - [ ] `package.json` has `"prepare": "husky"` script
 - [ ] Pre-commit includes large file guard (250-line warning, configurable)
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
+- [ ] Pre-commit includes lock file guard (rejects `package-lock.json`, `yarn.lock`, `bun.lockb`)
 
 ## Apply
 
