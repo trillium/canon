@@ -18,6 +18,9 @@
 - [ ] Commit-msg hook blocks default merge messages (`Merge branch...`, `Merge remote-tracking...`)
 - [ ] `.husky/pre-push` exists and blocks direct pushes to `main` and `master`
 - [ ] Pre-push hook skips when `$CI` or `$GITHUB_ACTIONS` env vars are set
+- [ ] `scripts/tsc-staged.sh` exists and type-checks only staged `.ts/.tsx` files
+- [ ] `tsc-staged.sh` prefers `tsgo` over `tsc` when available
+- [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files
 
 ## Apply
 
@@ -28,7 +31,7 @@
    ```json
    "lint-staged": {
      "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
-     "*.{ts,tsx}": "node scripts/check-no-emoji.mjs"
+     "*.{ts,tsx}": ["node scripts/check-no-emoji.mjs", "bash scripts/tsc-staged.sh"]
    }
    ```
 5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
@@ -38,6 +41,7 @@
 7. Ensure `"prepare": "husky"` is in `package.json` scripts
 8. Copy `.husky/commit-msg` from this module
 9. Copy `.husky/pre-push` from this module
+10. Copy `scripts/tsc-staged.sh` from this module and make it executable
 
 ## Conflicts
 

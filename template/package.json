@@ -61,6 +61,9 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
-    "*.{ts,tsx}": "node scripts/check-no-emoji.mjs"
+    "*.{ts,tsx}": [
+      "node scripts/check-no-emoji.mjs",
+      "bash scripts/tsc-staged.sh"
+    ]
   }
 }
