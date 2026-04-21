@@ -15,6 +15,7 @@
 - [ ] `.husky/commit-msg` exists and validates conventional commit format (`type(scope): description`)
 - [ ] Commit-msg hook uses zero dependencies (simple regex, no commitlint)
 - [ ] Valid commit types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, init
+- [ ] Commit-msg hook blocks default merge messages (`Merge branch...`, `Merge remote-tracking...`)
 - [ ] `.husky/pre-push` exists and blocks direct pushes to `main` and `master`
 - [ ] Pre-push hook skips when `$CI` or `$GITHUB_ACTIONS` env vars are set
 
