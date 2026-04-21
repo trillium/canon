@@ -23,6 +23,7 @@
 - [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files
 - [ ] Commit-msg hook auto-trims trailing whitespace from the first line
 - [ ] Commit-msg hook auto-lowercases the first letter after the `type(scope): ` prefix
+- [ ] Pre-commit includes gitleaks secret scanning (graceful degradation if not installed)
 
 ## Apply
 

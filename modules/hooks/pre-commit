@@ -71,3 +71,18 @@ for file in $(git diff --cached --name-only --diff-filter=ACM); do
     echo "warning: $file has $lines lines (limit: $LARGE_FILE_LIMIT). Consider decomposing."
   fi
 done
+
+# --- Secret scanning (gitleaks) ---
+# Scans staged changes for secrets. Graceful degradation if not installed.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --verbose
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "error: gitleaks detected secrets in staged changes."
+    echo "  Remove the secrets before committing."
+    echo "  Bypass (rare): git commit --no-verify"
+    exit 1
+  fi
+else
+  echo "warning: gitleaks not installed. Skipping secret scan. (brew install gitleaks)"
+fi
