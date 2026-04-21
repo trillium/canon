@@ -1,0 +1,36 @@
+name: Template Conformance
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  conformance:
+    name: Verify template conforms to canon modules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check biome.json matches linting module
+        run: diff modules/linting/biome.json template/biome.json
+
+      - name: Check pre-commit matches hooks module
+        run: diff modules/hooks/pre-commit template/.husky/pre-commit
+
+      - name: Check vitest config matches testing module
+        run: diff modules/testing/vitest.config.ts template/vitest.config.ts
+
+      - name: Check playwright config matches testing module
+        run: diff modules/testing/playwright.config.ts template/playwright.config.ts
+
+      - name: Check CI workflow matches ci module
+        run: diff modules/ci/.github/workflows/ci.yml template/.github/workflows/ci.yml
+
+      - name: Verify template builds
+        working-directory: template
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm run type-check
+          pnpm run lint
+          pnpm run build

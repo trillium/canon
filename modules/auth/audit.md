@@ -1,0 +1,31 @@
+# Module: Auth
+
+## Check
+
+- [ ] `@supabase/supabase-js` in dependencies
+- [ ] `@supabase/ssr` in dependencies
+- [ ] Server-side Supabase client in `src/lib/supabase/server.ts`
+- [ ] Browser-side Supabase client in `src/lib/supabase/client.ts`
+- [ ] Middleware handles session refresh (`src/middleware.ts` or equivalent)
+- [ ] Auth callback route at `src/app/auth/callback/route.ts`
+- [ ] Login page exists
+- [ ] Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Apply
+
+1. Run `pnpm add @supabase/supabase-js @supabase/ssr`
+2. Create `src/lib/supabase/server.ts` — SSR client factory using cookies
+3. Create `src/lib/supabase/client.ts` — browser client factory
+4. Create `src/middleware.ts` — session refresh on every request
+5. Create `src/app/auth/callback/route.ts` — OAuth/magic link callback
+6. Create login page at `src/app/login/page.tsx`
+7. Add env vars to `.env.local.example`:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   ```
+
+## Conflicts
+
+- If project uses a different auth provider (NextAuth, Clerk, Auth0), flag for manual review — do not replace without explicit approval
+- If project already has Supabase but uses the old `createServerComponentClient` pattern, migrate to `@supabase/ssr` pattern
