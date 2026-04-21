@@ -1,6 +1,18 @@
 #!/usr/bin/env sh
 
 COMMIT_MSG_FILE="$1"
+
+# --- Commit message auto-fix ---
+# Auto-trim trailing whitespace from the first line
+sed -i '' -e '1s/[[:space:]]*$//' "$COMMIT_MSG_FILE" 2>/dev/null || \
+  sed -i -e '1s/[[:space:]]*$//' "$COMMIT_MSG_FILE"
+
+# Auto-lowercase the first letter after the type(scope): prefix
+# e.g. "feat: Fix bug" -> "feat: fix bug"
+if command -v perl >/dev/null 2>&1; then
+  perl -i -pe 's/^([a-z]+(\([^)]*\))?:\s+)([A-Z])/\1\l\3/ if $. == 1' "$COMMIT_MSG_FILE"
+fi
+
 MSG=$(head -1 "$COMMIT_MSG_FILE")
 
 # --- Merge commit blocker ---

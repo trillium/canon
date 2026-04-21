@@ -21,6 +21,8 @@
 - [ ] `scripts/tsc-staged.sh` exists and type-checks only staged `.ts/.tsx` files
 - [ ] `tsc-staged.sh` prefers `tsgo` over `tsc` when available
 - [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files
+- [ ] Commit-msg hook auto-trims trailing whitespace from the first line
+- [ ] Commit-msg hook auto-lowercases the first letter after the `type(scope): ` prefix
 
 ## Apply
 
