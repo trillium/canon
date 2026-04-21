@@ -26,6 +26,12 @@ jobs:
       - name: Check CI workflow matches ci module
         run: diff modules/ci/.github/workflows/ci.yml template/.github/workflows/ci.yml
 
+      - name: Check accessibility workflow matches ci module
+        run: diff modules/ci/.github/workflows/accessibility.yml template/.github/workflows/accessibility.yml
+
+      - name: Check e2e workflow matches ci module
+        run: diff modules/ci/.github/workflows/e2e.yml template/.github/workflows/e2e.yml
+
       - name: Verify template builds
         working-directory: template
         run: |
