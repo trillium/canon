@@ -15,6 +15,8 @@
 - [ ] `.husky/commit-msg` exists and validates conventional commit format (`type(scope): description`)
 - [ ] Commit-msg hook uses zero dependencies (simple regex, no commitlint)
 - [ ] Valid commit types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, init
+- [ ] `.husky/pre-push` exists and blocks direct pushes to `main` and `master`
+- [ ] Pre-push hook skips when `$CI` or `$GITHUB_ACTIONS` env vars are set
 
 ## Apply
 
@@ -34,6 +36,7 @@
 6. Copy `.husky/large-files-allowlist.txt` from this module (add project-specific patterns as needed)
 7. Ensure `"prepare": "husky"` is in `package.json` scripts
 8. Copy `.husky/commit-msg` from this module
+9. Copy `.husky/pre-push` from this module
 
 ## Conflicts
 
