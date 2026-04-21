@@ -15,6 +15,31 @@ for lockfile in $WRONG_LOCKS; do
   fi
 done
 
+# --- Next.js 16 convention guard ---
+# Next.js 16 deprecated middleware.ts in favor of proxy.ts.
+# Only runs if the project uses Next.js 16+.
+if [ -f "package.json" ]; then
+  NEXT_VERSION=$(node -e "try{const p=require('./package.json');const v=(p.dependencies||{}).next||(p.devDependencies||{}).next||'';const m=v.match(/(\d+)/);if(m)process.stdout.write(m[1])}catch(e){}" 2>/dev/null)
+  if [ -n "$NEXT_VERSION" ] && [ "$NEXT_VERSION" -ge 16 ] 2>/dev/null; then
+    STAGED_FILES=$(git diff --cached --name-only)
+    DELETED_FILES=$(git diff --cached --name-only --diff-filter=D)
+
+    # Block staging middleware.ts
+    if echo "$STAGED_FILES" | grep -qE '(^|/)middleware\.(ts|js)$'; then
+      echo "error: middleware.ts is deprecated in Next.js 16+. Use proxy.ts instead."
+      echo "  See: https://nextjs.org/docs/app/api-reference/file-conventions/proxy"
+      exit 1
+    fi
+
+    # Block deleting proxy.ts
+    if echo "$DELETED_FILES" | grep -qE '(^|/)proxy\.(ts|js)$'; then
+      echo "error: proxy.ts is required for Next.js 16+ (replaces middleware.ts)."
+      echo "  Do not delete this file."
+      exit 1
+    fi
+  fi
+fi
+
 # --- Large file guard (warning only) ---
 # Flags staged files over 250 lines to encourage decomposition.
 # Allowlist: .husky/large-files-allowlist.txt (one glob per line)

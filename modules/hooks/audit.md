@@ -11,6 +11,7 @@
 - [ ] Pre-commit includes large file guard (250-line warning, configurable)
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
 - [ ] Pre-commit includes lock file guard (rejects `package-lock.json`, `yarn.lock`, `bun.lockb`)
+- [ ] Pre-commit includes Next.js 16 convention guard (blocks `middleware.ts`, protects `proxy.ts`)
 
 ## Apply
 
