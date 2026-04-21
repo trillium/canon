@@ -6,6 +6,7 @@
 - [ ] `lint-staged` in devDependencies
 - [ ] `.husky/pre-commit` exists and runs lint-staged
 - [ ] `lint-staged` config runs `biome check --write` on staged files
+- [ ] `lint-staged` config runs emoji guard (`check-no-emoji.mjs`) on `*.{ts,tsx}` files
 - [ ] `package.json` has `"prepare": "husky"` script
 
 ## Apply
@@ -16,10 +17,14 @@
 4. Add lint-staged config to `package.json`:
    ```json
    "lint-staged": {
-     "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched"
+     "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
+     "*.{ts,tsx}": "node scripts/check-no-emoji.mjs"
    }
    ```
-5. Ensure `"prepare": "husky"` is in `package.json` scripts
+5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
+   The script scans for raw emoji characters and fails if any are found.
+   Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.
+6. Ensure `"prepare": "husky"` is in `package.json` scripts
 
 ## Conflicts
 
