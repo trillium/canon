@@ -10,6 +10,8 @@
 - [ ] Auth callback route at `src/app/auth/callback/route.ts`
 - [ ] Login page exists
 - [ ] Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- [ ] Database types at `src/types/database.ts` (generated via `pnpm gen:types`)
+- [ ] `gen:types` script in `package.json`
 
 ## Apply
 
@@ -24,6 +26,11 @@
    NEXT_PUBLIC_SUPABASE_URL=
    NEXT_PUBLIC_SUPABASE_ANON_KEY=
    ```
+8. Add `gen:types` script to `package.json`:
+   ```json
+   "gen:types": "supabase gen types typescript --linked > src/types/database.ts"
+   ```
+9. Create placeholder `src/types/database.ts` — regenerate after linking Supabase project and running migrations
 
 ## Conflicts
 

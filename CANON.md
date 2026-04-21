@@ -64,6 +64,7 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Supabase PostgreSQL
 - Row Level Security on all tables
 - Migrations in `supabase/migrations/`
+- Generated TypeScript types via `pnpm gen:types` (`src/types/database.ts`)
 - Zod for runtime validation at API boundaries
 
 ### Feedback
