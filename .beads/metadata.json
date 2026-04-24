@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "canon",
+  "project_id": "60393b7c-0364-43fd-ad24-6faf1d15e248"
+}
