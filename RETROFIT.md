@@ -85,12 +85,13 @@ Apply modules in this order to avoid dependency issues:
 4. `design-system` — depends on linting, hooks, styling; enable rules one at a time as components exist
 5. `auth` — feedtack and other modules may depend on auth
 6. `testing` — can validate other modules
-7. `ci` — validates everything
-8. `feedtack` — depends on auth, styling
-9. `email` — depends on auth
-10. `analytics` — independent, safe to add anytime
-11. `errors` — independent, safe to add anytime
-12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
+7. `codebase-health` — analyzes project structure, needs source files in place
+8. `ci` — validates everything (including codebase-health workflow)
+9. `feedtack` — depends on auth, styling
+10. `email` — depends on auth
+11. `analytics` — independent, safe to add anytime
+12. `errors` — independent, safe to add anytime
+13. `content-acceptance` — only for projects with editable copy; database variant depends on auth
 
 ## Notes
 
