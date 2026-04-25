@@ -8,8 +8,6 @@
 - [ ] `lint-staged` config runs `biome check --write` on staged files
 - [ ] `lint-staged` config runs emoji guard (`check-no-emoji.mjs`) on `*.{ts,tsx}` files
 - [ ] Emoji guard scans only added lines in `git diff --cached`, not whole files (safe for legacy codebases)
-- [ ] `lint-staged` config runs browser dialog guard (`check-no-browser-dialogs.mjs`) on `*.{ts,tsx,js,jsx}` files
-- [ ] Browser dialog guard rejects `alert()`, `confirm()`, `prompt()` in added lines (use toast/modal components instead)
 - [ ] `package.json` has `"prepare": "husky"` script
 - [ ] Pre-commit includes large file guard (250-line warning, configurable)
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
@@ -39,7 +37,7 @@
    ```json
    "lint-staged": {
      "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
-     "*.{ts,tsx}": ["node scripts/check-no-emoji.mjs", "node scripts/check-no-browser-dialogs.mjs", "bash scripts/tsc-staged.sh"],
+     "*.{ts,tsx}": ["node scripts/check-no-emoji.mjs", "bash scripts/tsc-staged.sh"],
      "*.{md,mdx}": "cspell lint --no-must-find-files"
    }
    ```
@@ -47,9 +45,6 @@
 5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
    The script scans added lines in `git diff --cached` for raw emoji and fails if any are found.
    Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.
-6. Copy `scripts/check-no-browser-dialogs.mjs` from this module.
-   The script scans added lines in `git diff --cached` for `alert()`, `confirm()`, `prompt()`.
-   Use toast or modal UI components instead of native browser dialogs.
 6. Copy `.husky/large-files-allowlist.txt` from this module (add project-specific patterns as needed)
 7. Ensure `"prepare": "husky"` is in `package.json` scripts
 8. Copy `.husky/commit-msg` from this module
