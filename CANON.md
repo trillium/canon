@@ -43,9 +43,17 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Playwright for end-to-end tests
 - Axe-core integration for a11y testing
 
+### Codebase Health
+- Fallow for dead code, duplication, complexity, architecture drift
+- Circular dependencies and boundary violations as errors
+- Dead code and complexity as warnings (incremental adoption)
+- Semantic duplication detection at 8% threshold
+- Pre-push hook with graceful degradation
+- JSCPD as complement for polyglot projects (non-TS/JS files only)
+
 ### CI/CD
 - GitHub Actions
-- Jobs: type-check, biome lint, unit tests (vitest), build, a11y (axe-core + Playwright)
+- Jobs: type-check, biome lint, unit tests (vitest), build, a11y (axe-core + Playwright), codebase health (fallow)
 - All jobs run in parallel on PR
 
 ### Styling

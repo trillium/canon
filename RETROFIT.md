@@ -84,11 +84,12 @@ Apply modules in this order to avoid dependency issues:
 3. `styling` — many modules reference tailwind/shadcn
 4. `auth` — feedtack and other modules may depend on auth
 5. `testing` — can validate other modules
-6. `ci` — validates everything
-7. `feedtack` — depends on auth, styling
-8. `email` — depends on auth
-9. `analytics` — independent, safe to add anytime
-10. `errors` — independent, safe to add anytime
+6. `codebase-health` — analyzes project structure, needs source files in place
+7. `ci` — validates everything (including codebase-health workflow)
+8. `feedtack` — depends on auth, styling
+9. `email` — depends on auth
+10. `analytics` — independent, safe to add anytime
+11. `errors` — independent, safe to add anytime
 
 ## Notes
 
