@@ -20,3 +20,8 @@ if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
   echo "  Bypass (rare): git push --no-verify"
   exit 1
 fi
+
+# --- Codebase health check (if codebase-health module is active) ---
+if [ -f "scripts/fallow-prepush.sh" ]; then
+  bash scripts/fallow-prepush.sh
+fi
