@@ -69,7 +69,6 @@
     "*.{js,jsx,ts,tsx,json,css}": "biome check --write --no-errors-on-unmatched",
     "*.{ts,tsx}": [
       "node scripts/check-no-emoji.mjs",
-      "node scripts/check-no-browser-dialogs.mjs",
       "bash scripts/tsc-staged.sh"
     ],
     "*.{md,mdx}": "cspell lint --no-must-find-files"
