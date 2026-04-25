@@ -39,7 +39,13 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noArrayIndexKey": "warn"
+        "noArrayIndexKey": "warn",
+        "noRestrictedGlobals": {
+          "level": "error",
+          "options": {
+            "deniedGlobals": ["alert", "confirm", "prompt"]
+          }
+        }
       },
       "style": {
         "useConst": "error",
