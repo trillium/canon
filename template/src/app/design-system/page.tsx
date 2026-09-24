@@ -15,10 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  DS_COMPONENTS_BY_CATEGORY,
-  DS_RULES,
-} from "@/components/ui/manifest";
+import { DS_COMPONENTS_BY_CATEGORY, DS_RULES } from "@/components/ui/manifest";
 
 function Section({
   id,
@@ -33,9 +30,7 @@ function Section({
 }) {
   return (
     <section id={id} className="mb-12 scroll-mt-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-        {title}
-      </h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
       <p className="mt-1 font-mono text-xs text-gray-500">{path}</p>
       <div className="mt-4 flex flex-wrap items-center gap-3">{children}</div>
     </section>
@@ -46,12 +41,10 @@ export default function DesignSystemPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
       <header className="mb-10 border-b border-gray-200 pb-6 dark:border-gray-800">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Design System
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Design System</h1>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Pages compose these primitives — they never hand-roll raw UI. Rule
-          registry: <code>src/components/ui/manifest.ts</code>
+          Pages compose these primitives — they never hand-roll raw UI. Rule registry:{" "}
+          <code>src/components/ui/manifest.ts</code>
         </p>
       </header>
 
@@ -97,8 +90,7 @@ export default function DesignSystemPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Cards own rounded+border+padded surfaces. Never rebuild this
-              pattern inline.
+              Cards own rounded+border+padded surfaces. Never rebuild this pattern inline.
             </p>
             <div className="mt-4">
               <Button size="sm">Card action</Button>
@@ -108,9 +100,7 @@ export default function DesignSystemPage() {
       </Section>
 
       <section id="enforcement" className="mb-12 scroll-mt-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-          Enforcement
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Enforcement</h2>
         <p className="mt-1 font-mono text-xs text-gray-500">
           derived from DS_RULES — {DS_RULES.length} rules,{" "}
           {Object.values(DS_COMPONENTS_BY_CATEGORY).flat().length} components
@@ -126,17 +116,10 @@ export default function DesignSystemPage() {
             </thead>
             <tbody>
               {DS_RULES.map((rule) => (
-                <tr
-                  key={rule.name}
-                  className="border-b border-gray-100 dark:border-gray-900"
-                >
+                <tr key={rule.name} className="border-b border-gray-100 dark:border-gray-900">
                   <td className="py-2 pr-4 font-mono text-xs">{rule.name}</td>
-                  <td className="py-2 pr-4 font-mono text-xs">
-                    {rule.component}
-                  </td>
-                  <td className="py-2 font-mono text-xs text-gray-500">
-                    {rule.rawPattern}
-                  </td>
+                  <td className="py-2 pr-4 font-mono text-xs">{rule.component}</td>
+                  <td className="py-2 font-mono text-xs text-gray-500">{rule.rawPattern}</td>
                 </tr>
               ))}
             </tbody>

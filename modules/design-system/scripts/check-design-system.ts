@@ -101,10 +101,7 @@ function patternMatchesLine(pattern: ManifestPattern, line: string): boolean {
   if (pattern.jsx?.test(line)) return true;
   if (pattern.className?.test(line)) return true;
   if (pattern.jsxStyle) {
-    if (
-      pattern.jsxStyle.element.test(line) &&
-      pattern.jsxStyle.styling.test(line)
-    ) {
+    if (pattern.jsxStyle.element.test(line) && pattern.jsxStyle.styling.test(line)) {
       return true;
     }
   }
@@ -123,13 +120,9 @@ function checkFile(filePath: string, rules: ManifestRule[]): Warning[] {
   }
 
   if (content.includes("/* ds-ignore-file */")) {
-    const reason = content
-      .match(/\/\*\s*ds-ignore-file\s*(.*?)\s*\*\//)?.[1]
-      ?.trim();
+    const reason = content.match(/\/\*\s*ds-ignore-file\s*(.*?)\s*\*\//)?.[1]?.trim();
     process.stderr.write(
-      `[ds-ignore] ${filePath} — whole file suppressed` +
-        (reason ? ` (${reason})` : "") +
-        "\n",
+      `[ds-ignore] ${filePath} — whole file suppressed` + (reason ? ` (${reason})` : "") + "\n",
     );
     return [];
   }
@@ -150,9 +143,7 @@ function checkFile(filePath: string, rules: ManifestRule[]): Warning[] {
     if (line.includes("// ds-ignore")) {
       const reason = line.match(/\/\/\s*ds-ignore\s*(.*)/)?.[1]?.trim();
       process.stderr.write(
-        `[ds-ignore] ${filePath}:${i + 1} — suppressed` +
-          (reason ? ` (${reason})` : "") +
-          "\n",
+        `[ds-ignore] ${filePath}:${i + 1} — suppressed` + (reason ? ` (${reason})` : "") + "\n",
       );
       continue;
     }
@@ -269,9 +260,7 @@ if (allWarnings.length > 0) {
 
   console.error(`\n${allWarnings.length} design system violation(s).`);
   console.error("Commit blocked. Pages must use components — not raw HTML.");
-  console.error(
-    "Extract the pattern into src/components/ui/ first, then use it.",
-  );
+  console.error("Extract the pattern into src/components/ui/ first, then use it.");
   process.exit(1);
 }
 

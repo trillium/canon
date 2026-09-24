@@ -58,9 +58,7 @@ try {
 const sectionsBySource = new Map<string, string>();
 sectionsBySource.set("page.tsx", dsPageSrc);
 
-for (const match of dsPageSrc.matchAll(
-  /from\s+["']\.\/_sections\/([^"']+)["']/g,
-)) {
+for (const match of dsPageSrc.matchAll(/from\s+["']\.\/_sections\/([^"']+)["']/g)) {
   const name = match[1];
   const sectionPath = join(DS_SECTIONS_DIR, `${name}.tsx`);
   try {
@@ -72,9 +70,7 @@ for (const match of dsPageSrc.matchAll(
 
 const importedSlugs = new Set<string>();
 for (const src of sectionsBySource.values()) {
-  for (const match of src.matchAll(
-    /from\s+["']@\/components\/ui\/([^"']+)["']/g,
-  )) {
+  for (const match of src.matchAll(/from\s+["']@\/components\/ui\/([^"']+)["']/g)) {
     importedSlugs.add((match[1] ?? "").split("/")[0] ?? "");
   }
 }
@@ -87,9 +83,7 @@ if (missing.length === 0) {
 }
 
 console.error("");
-console.error(
-  "ERROR: The following components are missing from the design system page:",
-);
+console.error("ERROR: The following components are missing from the design system page:");
 console.error("  src/app/design-system/page.tsx");
 console.error("");
 for (const slug of missing) {

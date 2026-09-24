@@ -38,12 +38,7 @@ export interface DsRulePattern {
 }
 
 /** Categories used in the catalogue + script error output. */
-export type DsRuleCategory =
-  | "interactive"
-  | "display"
-  | "layout"
-  | "feedback"
-  | "navigation";
+export type DsRuleCategory = "interactive" | "display" | "layout" | "feedback" | "navigation";
 
 /**
  * Registered DS rule. `selfExempt` skips the rule on the file that DEFINES
@@ -88,8 +83,7 @@ export const DS_RULES: DsRule[] = [
     importPath: "@/components/ui/button",
     category: "interactive",
     selfExempt: true,
-    description:
-      "Use Button with the destructive variant instead of a raw element.",
+    description: "Use Button with the destructive variant instead of a raw element.",
     rawPattern: "<button\\b[^>]*\\bclassName=[^>]*bg-red",
     patterns: [{ jsx: /<button\b[^>]*\bclassName=[^>]*bg-red/ }],
   },
@@ -119,12 +113,9 @@ export const DS_RULES: DsRule[] = [
     importPath: "@/components/ui/badge",
     category: "display",
     selfExempt: true,
-    description:
-      "Use Badge instead of an inline rounded-full pill with classes.",
+    description: "Use Badge instead of an inline rounded-full pill with classes.",
     rawPattern: "rounded-full\\s.*px-.*(?:text-xs|text-sm).*font-medium",
-    patterns: [
-      { className: /rounded-full\s.*px-.*(?:text-xs|text-sm).*font-medium/ },
-    ],
+    patterns: [{ className: /rounded-full\s.*px-.*(?:text-xs|text-sm).*font-medium/ }],
   },
   {
     name: "focus-ring-inconsistency",
@@ -134,12 +125,9 @@ export const DS_RULES: DsRule[] = [
     hint:
       "Use focus:ring-primary-500 on the line. Canonical: " +
       "focus:outline-none focus:ring-2 focus:ring-primary-500.",
-    description:
-      "Focus rings must use focus:ring-primary-500 for consistency.",
+    description: "Focus rings must use focus:ring-primary-500 for consistency.",
     rawPattern: "focus:ring-* without focus:ring-primary-500 on same line",
-    patterns: [
-      { className: /(?=.*focus:ring-)(?!.*focus:ring-primary-500)^.*$/ },
-    ],
+    patterns: [{ className: /(?=.*focus:ring-)(?!.*focus:ring-primary-500)^.*$/ }],
   },
   {
     name: "undocumented-card-pattern",
