@@ -10,6 +10,9 @@
 - [ ] Emoji guard scans only added lines in `git diff --cached`, not whole files (safe for legacy codebases)
 - [ ] `package.json` has `"prepare": "husky"` script
 - [ ] Pre-commit includes large file guard (250-line warning, configurable)
+- [ ] Pre-commit verifies design-system catalogue coverage when
+      `src/components/ui/` files are staged (if design-system module is
+      active)
 - [ ] `.husky/large-files-allowlist.txt` exists for legitimate large files
 - [ ] Pre-commit includes lock file guard (rejects `package-lock.json`, `yarn.lock`, `bun.lockb`)
 - [ ] Pre-commit includes Next.js 16 convention guard (blocks `middleware.ts`, protects `proxy.ts`)
@@ -22,6 +25,10 @@
 - [ ] `scripts/tsc-staged.sh` exists and type-checks only staged `.ts/.tsx` files
 - [ ] `tsc-staged.sh` prefers `tsgo` over `tsc` when available
 - [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files
+- [ ] `lint-staged` config runs `node scripts/check-design-system.ts` on
+      `*.{ts,tsx}` files (if design-system module is active)
+- [ ] `lint-staged` config runs `node scripts/check-ds-coverage.ts` on
+      `src/components/ui/*.tsx` files (if design-system module is active)
 - [ ] `lint-staged` config runs `cspell lint --no-must-find-files` on `*.{md,mdx}` files (if spellcheck module is active)
 - [ ] Commit-msg hook auto-trims trailing whitespace from the first line
 - [ ] Commit-msg hook auto-lowercases the first letter after the `type(scope): ` prefix
@@ -42,6 +49,9 @@
    }
    ```
    Note: The `*.{md,mdx}` cspell rule is only needed when the spellcheck module is active.
+   When the design-system module is active, extend the config (see
+   `modules/design-system/audit.md`): run `check-design-system.ts` on
+   `*.{ts,tsx}` and `check-ds-coverage.ts` on `src/components/ui/*.tsx`.
 5. Copy `scripts/check-no-emoji.mjs` from this module (or create it — see below).
    The script scans added lines in `git diff --cached` for raw emoji and fails if any are found.
    Use `lucide-react` SVG icons instead of raw emoji for cross-platform consistency.

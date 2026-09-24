@@ -82,6 +82,8 @@ Apply modules in this order to avoid dependency issues:
 1. `linting` — foundational, other modules assume biome
 2. `hooks` — depends on linting config
 3. `styling` — many modules reference tailwind/shadcn
+4. `design-system` — reuse-first gate on top of styling; backfills the
+   manifest, scripts, hook wiring, and catalogue for existing `ui/` code
 4. `auth` — feedtack and other modules may depend on auth
 5. `testing` — can validate other modules
 6. `codebase-health` — analyzes project structure, needs source files in place
@@ -94,6 +96,13 @@ Apply modules in this order to avoid dependency issues:
 ## Notes
 
 - Never remove existing functionality that isn't part of canon's scope
+- When the design-system module lands on a project with existing `ui/`
+  code, expect a first wave of violations: register each primitive in the
+  manifest and catalogue it (or `ds-ignore` genuine one-offs) before the
+  gate goes green — do not weaken the rules to fit the drift
+- Gate reviews on reuse sign-off: every module touching UI must cite the
+  catalogue entry it reuses, or ship the new primitive + catalogue entry
+  in the same change
 - If the target uses ESLint/Prettier, remove them only when applying the linting module
 - Preserve existing tests — add canon's test config alongside them
 - If a module's apply step would break existing code, flag it as a conflict

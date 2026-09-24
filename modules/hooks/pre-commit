@@ -72,6 +72,14 @@ for file in $(git diff --cached --name-only --diff-filter=ACM); do
   fi
 done
 
+# --- Design system coverage (design-system module) ---
+# If any src/components/ui/ file is staged, verify the catalogue imports
+# every component in that directory. Fails fast with a clear list.
+_STAGED_UI=$(git diff --cached --name-only --diff-filter=ACM | grep '^src/components/ui/.*\.tsx$' || true)
+if [ -n "$_STAGED_UI" ] && [ -f "scripts/check-ds-coverage.ts" ]; then
+  node scripts/check-ds-coverage.ts || exit 1
+fi
+
 # --- Secret scanning (gitleaks) ---
 # Scans staged changes for secrets. Graceful degradation if not installed.
 if command -v gitleaks >/dev/null 2>&1; then

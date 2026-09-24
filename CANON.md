@@ -53,7 +53,9 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 
 ### CI/CD
 - GitHub Actions
-- Jobs: type-check, biome lint, unit tests (vitest), build, a11y (axe-core + Playwright), codebase health (fallow)
+- Jobs: type-check, biome lint, unit tests (vitest), build, design-system
+  (`check:ds` + `check:ds-coverage`), a11y (axe-core + Playwright),
+  codebase health (fallow)
 - All jobs run in parallel on PR
 
 ### Styling
@@ -62,6 +64,19 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - CVA for variant management
 - lucide-react for icons
 - clsx + tailwind-merge for class composition
+
+### Design System (reuse-first gate)
+- Pages compose `src/components/ui/` primitives; no hand-rolled raw UI
+  where the library covers it — enforced at commit, not by review
+- `src/components/ui/manifest.ts` is the rule registry (raw JSX -> DS
+  component + import path); `scripts/check-design-system.ts` blocks commits
+  on violation (`ds-ignore` escape only)
+- `scripts/check-ds-coverage.ts` fails when a `ui/` component lacks a
+  catalogue entry; the live catalogue at `/design-system` renders every
+  primitive plus the enforcement table derived from the manifest
+- Wired via lint-staged + pre-commit hook + CI design-system job
+- Reviews check reuse sign-off per module: new UI must cite the catalogue
+  entry it reuses, or the new primitive + catalogue entry it adds
 
 ### Auth
 - Supabase Auth with SSR pattern

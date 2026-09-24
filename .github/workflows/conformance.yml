@@ -32,6 +32,14 @@ jobs:
       - name: Check e2e workflow matches ci module
         run: diff modules/ci/.github/workflows/e2e.yml template/.github/workflows/e2e.yml
 
+      - name: Check design-system manifest matches module
+        run: diff modules/design-system/manifest.ts template/src/components/ui/manifest.ts
+
+      - name: Check design-system scripts match module
+        run: |
+          diff modules/design-system/scripts/check-design-system.ts template/scripts/check-design-system.ts
+          diff modules/design-system/scripts/check-ds-coverage.ts template/scripts/check-ds-coverage.ts
+
       - name: Verify template builds
         working-directory: template
         run: |
