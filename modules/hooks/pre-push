@@ -20,3 +20,14 @@ if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
   echo "  Bypass (rare): git push --no-verify"
   exit 1
 fi
+
+# --- Design system guard ---
+# Full-repo sweep: lint-staged only sees staged lines, this catches the rest.
+# Skipped when the design-system module is not installed or bun is missing.
+if [ -f "scripts/check-design-system.ts" ]; then
+  if command -v bun >/dev/null 2>&1; then
+    pnpm run --silent check:ds || exit 1
+  else
+    echo "warning: bun not installed. Skipping design-system check. (brew install oven-sh/bun/bun)"
+  fi
+fi

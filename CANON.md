@@ -55,6 +55,20 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - lucide-react for icons
 - clsx + tailwind-merge for class composition
 
+### Design System
+- Raw HTML elements (`<button>`, `<input>`, `<p>`, `<h1>`–`<h6>`, `<a>`, `<div>`, …) are banned outside `components/ui/`; each has a design-system component that replaces it
+- `components/ui/manifest.ts` is the single source of truth: each rule names the banned markup, its replacement and the import path. The generic manifest is identical in every project; per-project choices (which presets are enforced, overrides, custom rules) live in `manifest.config.ts`
+- Rules are enabled incrementally — a rule is turned on when its component exists, so adoption never breaks a build
+- Four enforcement layers, all driven by the manifest:
+  - Claude Code `PreToolUse` hook rejects `Write`/`Edit` that introduce raw tags (existing lines are not flagged)
+  - lint-staged checks added lines in staged files
+  - Husky pre-push sweeps the whole repo
+  - CI `design-system` job runs the same sweep
+- Coverage: every primitive in `components/ui/` must have a manifest entry, and every manifest component must appear on the catalogue page
+- A `/design-system` catalogue page is required — enforcement without a place to discover the replacements is a closed door. It shows token swatches, the type scale, a live example of every component, the rules table and the opt-out directives
+- Escape hatches: `// ds-ignore` (nearby lines), `/* ds-ignore-file */` (whole file); a rule can opt out of both with `noEscapeHatch`
+- Scripts run on Bun (`scripts/check-design-system.ts`, `check-ds-coverage.ts`, `check-ds-page.ts`)
+
 ### Auth
 - Supabase Auth with SSR pattern
 - Magic link, OAuth (Google), password flows

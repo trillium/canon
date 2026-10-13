@@ -19,6 +19,7 @@
 - [ ] Commit-msg hook blocks default merge messages (`Merge branch...`, `Merge remote-tracking...`)
 - [ ] `.husky/pre-push` exists and blocks direct pushes to `main` and `master`
 - [ ] Pre-push hook skips when `$CI` or `$GITHUB_ACTIONS` env vars are set
+- [ ] Pre-push hook runs `pnpm run check:ds` when `scripts/check-design-system.ts` exists (design-system module; warns and skips if `bun` is missing)
 - [ ] `scripts/tsc-staged.sh` exists and type-checks only staged `.ts/.tsx` files
 - [ ] `tsc-staged.sh` prefers `tsgo` over `tsc` when available
 - [ ] `lint-staged` config runs `tsc-staged.sh` on `*.{ts,tsx}` files

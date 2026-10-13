@@ -56,6 +56,7 @@ canon/
     ci/
     feedtack/
     styling/
+    design-system/
     auth/
     email/
     analytics/
