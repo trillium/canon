@@ -18,6 +18,7 @@ Both variants share the `scripts/` lint and report tools.
 - [ ] Database variant: `src/lib/content-acceptance.ts` exports `fieldHash` (sha256, 12 hex chars), `STRUCTURAL_KEYS`, `collectFields`, `unacceptedFields`
 - [ ] Database variant: `page_content.accepted_fields` jsonb column exists (`{ "section.field": { hash, by[], at } }`)
 - [ ] Database variant: `GET /api/content/status`, `POST`/`DELETE /api/content/accept` exist and are gated by `requireAdmin` (human session only — no API-key, service-token or header bypass)
+- [ ] Database variant: the accept route hashes the stored value and returns 409 if the value sent differs
 - [ ] Database variant: the content edit route deletes a field's acceptance record when its value changes
 - [ ] Database variant: the deploy route reports unaccepted fields (warn by default, refuses when `CONTENT_ACCEPTANCE_GATE=hard`)
 - [ ] Sidecar variant: `scripts/content-acceptance.mjs` exists and byte-identical; `content/.accepted.json` is committed
@@ -37,7 +38,7 @@ Both variants share the `scripts/` lint and report tools.
 5. **Database variant:**
    1. Copy `lib/content-acceptance.ts` and `lib/require-admin.ts` to `src/lib/`; extend `STRUCTURAL_KEYS` for the project
    2. Copy `routes/accept/route.ts` → `src/app/api/content/accept/route.ts` and `routes/status/route.ts` → `src/app/api/content/status/route.ts`
-   3. Add the migration in `supabase/migration.sql` via `scripts/next-migration.sh`
+   3. Add the migration in `supabase/migration.sql` via `scripts/next-migration.sh` (includes the atomic `accept_content_field` / `unaccept_content_field` functions the accept route calls)
    4. Set `ADMIN_EMAILS` (comma-separated) and `SUPABASE_SERVICE_ROLE_KEY`
    5. In the content edit route, delete `accepted_fields[fieldPath]` for every field whose value changed
    6. Wire the deploy route per `routes/deploy-gate/route.ts`; leave `CONTENT_ACCEPTANCE_GATE` unset (warn) or set `hard`
