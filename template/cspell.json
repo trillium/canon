@@ -8,15 +8,7 @@
       "addWords": true
     }
   ],
-  "dictionaries": [
-    "typescript",
-    "node",
-    "npm",
-    "html",
-    "css",
-    "software-terms",
-    "project-words"
-  ],
+  "dictionaries": ["typescript", "node", "npm", "html", "css", "software-terms", "project-words"],
   "files": ["**/*.{md,mdx,ts,tsx}"],
   "ignorePaths": [
     "node_modules/**",

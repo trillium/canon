@@ -1,22 +1,25 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "a11y": {
-        "recommended": true,
-        "noBlankTarget": "error",
+        "preset": "recommended",
         "useAltText": "warn",
-        "useAriaProps": "warn",
+        "useAriaPropsForRole": "warn",
         "useButtonType": "warn",
         "useHeadingContent": "warn",
         "useHtmlLang": "warn",
@@ -51,7 +54,8 @@
         "noImgElement": "warn"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "error"
+        "noDangerouslySetInnerHtml": "error",
+        "noBlankTarget": "error"
       }
     }
   },
@@ -67,6 +71,9 @@
     }
   },
   "css": {
+    "parser": {
+      "tailwindDirectives": true
+    },
     "formatter": {
       "enabled": true
     },
@@ -75,14 +82,15 @@
     }
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      ".next",
-      "dist",
-      "build",
-      "coverage",
-      ".vercel",
-      "supabase/.temp"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.next",
+      "!**/dist",
+      "!**/build",
+      "!**/coverage",
+      "!**/.vercel",
+      "!**/supabase/.temp"
     ]
   },
   "overrides": [
@@ -92,6 +100,16 @@
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["scripts/check-no-emoji.mjs"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noMisleadingCharacterClass": "off"
           }
         }
       }
