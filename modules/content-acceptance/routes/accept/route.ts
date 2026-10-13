@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { fieldHash } from "@/lib/content-acceptance";
+import { collectFields, fieldHash } from "@/lib/content-acceptance";
 import { requireAdmin } from "@/lib/require-admin";
 
 // POST   /api/content/accept  { path: "home.hero.heading", value: "current text" }
@@ -25,31 +25,28 @@ export async function POST(req: NextRequest) {
 
   const { data: row, error: fetchErr } = await supabase
     .from("page_content")
-    .select("accepted_fields")
+    .select("content")
     .eq("page", page)
     .single();
   if (fetchErr || !row) {
     return NextResponse.json({ error: `Page not found: ${page}` }, { status: 404 });
   }
 
-  const accepted = row.accepted_fields ?? {};
-  const existing = accepted[fieldPath];
-  const hash = fieldHash(body.value);
-
-  if (existing?.hash === hash && existing.by.includes(email)) {
-    return NextResponse.json({ ok: true, already: true });
+  const fields: Record<string, string> = {};
+  collectFields(row.content, "", fields);
+  if (fields[fieldPath] !== body.value) {
+    return NextResponse.json(
+      { error: `Stored value of ${fieldPath} differs from the value sent` },
+      { status: 409 },
+    );
   }
 
-  accepted[fieldPath] = {
-    hash,
-    by: existing?.hash === hash ? [...new Set([...existing.by, email])] : [email],
-    at: new Date().toISOString(),
-  };
-
-  const { error: updateErr } = await supabase
-    .from("page_content")
-    .update({ accepted_fields: accepted })
-    .eq("page", page);
+  const { data: accepted, error: updateErr } = await supabase.rpc("accept_content_field", {
+    p_page: page,
+    p_field: fieldPath,
+    p_hash: fieldHash(fields[fieldPath]),
+    p_email: email,
+  });
   if (updateErr) {
     return NextResponse.json({ error: updateErr.message }, { status: 500 });
   }
@@ -67,25 +64,15 @@ export async function DELETE(req: NextRequest) {
   const [page, ...rest] = path.split(".");
   const fieldPath = rest.join(".");
 
-  const { data: row, error: fetchErr } = await supabase
-    .from("page_content")
-    .select("accepted_fields")
-    .eq("page", page)
-    .single();
-  if (fetchErr || !row) {
-    return NextResponse.json({ error: `Page not found: ${page}` }, { status: 404 });
-  }
-
-  const accepted = row.accepted_fields ?? {};
-  if (!(fieldPath in accepted)) return NextResponse.json({ ok: true, already: true });
-
-  delete accepted[fieldPath];
-  const { error: updateErr } = await supabase
-    .from("page_content")
-    .update({ accepted_fields: accepted })
-    .eq("page", page);
+  const { data: accepted, error: updateErr } = await supabase.rpc("unaccept_content_field", {
+    p_page: page,
+    p_field: fieldPath,
+  });
   if (updateErr) {
     return NextResponse.json({ error: updateErr.message }, { status: 500 });
+  }
+  if (accepted === null) {
+    return NextResponse.json({ error: `Page not found: ${page}` }, { status: 404 });
   }
   return NextResponse.json({ ok: true, field: fieldPath });
 }

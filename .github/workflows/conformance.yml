@@ -53,6 +53,9 @@ jobs:
       - name: Check content-acceptance scripts/content-report.mjs matches template
         run: diff modules/content-acceptance/scripts/content-report.mjs template/scripts/content-report.mjs
 
+      - name: Check content-acceptance sidecar/content-acceptance.mjs matches template
+        run: diff modules/content-acceptance/sidecar/content-acceptance.mjs template/scripts/content-acceptance.mjs
+
       - name: Check content-acceptance supabase/migration.sql matches template
         run: diff modules/content-acceptance/supabase/migration.sql template/supabase/migrations/00002_content_acceptance.sql
 
