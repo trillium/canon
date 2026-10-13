@@ -89,6 +89,7 @@ Apply modules in this order to avoid dependency issues:
 8. `email` — depends on auth
 9. `analytics` — independent, safe to add anytime
 10. `errors` — independent, safe to add anytime
+11. `content-acceptance` — only for projects with editable copy; database variant depends on auth
 
 ## Notes
 

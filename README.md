@@ -60,6 +60,7 @@ canon/
     email/
     analytics/
     errors/
+    content-acceptance/
   template/              # skeleton Next.js app, all modules applied
 ```
 

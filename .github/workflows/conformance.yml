@@ -32,6 +32,30 @@ jobs:
       - name: Check e2e workflow matches ci module
         run: diff modules/ci/.github/workflows/e2e.yml template/.github/workflows/e2e.yml
 
+      - name: Check content-acceptance lib/content-acceptance.ts matches template
+        run: diff modules/content-acceptance/lib/content-acceptance.ts template/src/lib/content-acceptance.ts
+
+      - name: Check content-acceptance lib/require-admin.ts matches template
+        run: diff modules/content-acceptance/lib/require-admin.ts template/src/lib/require-admin.ts
+
+      - name: Check content-acceptance routes/accept/route.ts matches template
+        run: diff modules/content-acceptance/routes/accept/route.ts template/src/app/api/content/accept/route.ts
+
+      - name: Check content-acceptance routes/status/route.ts matches template
+        run: diff modules/content-acceptance/routes/status/route.ts template/src/app/api/content/status/route.ts
+
+      - name: Check content-acceptance routes/deploy-gate/route.ts matches template
+        run: diff modules/content-acceptance/routes/deploy-gate/route.ts template/src/app/api/deploy/route.ts
+
+      - name: Check content-acceptance scripts/lint-content.mjs matches template
+        run: diff modules/content-acceptance/scripts/lint-content.mjs template/scripts/lint-content.mjs
+
+      - name: Check content-acceptance scripts/content-report.mjs matches template
+        run: diff modules/content-acceptance/scripts/content-report.mjs template/scripts/content-report.mjs
+
+      - name: Check content-acceptance supabase/migration.sql matches template
+        run: diff modules/content-acceptance/supabase/migration.sql template/supabase/migrations/00002_content_acceptance.sql
+
       - name: Verify template builds
         working-directory: template
         run: |

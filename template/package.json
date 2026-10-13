@@ -17,6 +17,8 @@
     "email:dev": "email dev",
     "gen:types": "supabase gen types typescript --linked > src/types/database.ts",
     "prepare": "husky",
+    "lint:content": "node scripts/lint-content.mjs",
+    "content:report": "node scripts/content-report.mjs",
     "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'"
   },
   "dependencies": {

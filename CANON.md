@@ -89,6 +89,13 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Source maps uploaded on build
 - Environment-aware (dev/staging/prod)
 
+### Content Acceptance
+- Copy is JSON per page, colocated with its component; every string carries `data-content="page.section.field"` or `data-content-skip="reason"`
+- Human sign-off per field: `{hash, by, at}` records, `fieldHash` = sha256 truncated to 12 hex; unaccepted = missing or hash mismatch; edits invalidate
+- Deploy gate warns by default, hard-blocks with `CONTENT_ACCEPTANCE_GATE=hard`
+- Agents may never accept
+- Database variant (Supabase) or sidecar-file variant (static sites); see `modules/content-acceptance/SPEC.md`
+
 ### State Management
 - Zustand for client state
 - No Redux. No Context for complex state.
