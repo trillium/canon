@@ -16,10 +16,7 @@ const root = rootIdx >= 0 ? args[rootIdx + 1] : process.cwd();
 
 const cfgPath = join(root, "content-acceptance.config.json");
 const cfg = existsSync(cfgPath) ? JSON.parse(readFileSync(cfgPath, "utf-8")) : {};
-const appDir = join(
-  root,
-  cfg.appDir ?? (existsSync(join(root, "src/app")) ? "src/app" : "app"),
-);
+const appDir = join(root, cfg.appDir ?? (existsSync(join(root, "src/app")) ? "src/app" : "app"));
 const contentDir = join(root, cfg.contentDir ?? "content");
 const skipRoutes = new Set(cfg.skipRoutes ?? ["/admin", "/admin/callback"]);
 const routeOverrides = cfg.routes ?? {};
@@ -75,7 +72,10 @@ const sharedAttrs = walk(appDir)
 const pages = walk(appDir)
   .filter((f) => /[\\/]page\.(tsx|jsx)$/.test(f))
   .map((file) => {
-    const segs = relative(appDir, file).split(/[\\/]/).slice(0, -1).filter((s) => !/^\(.*\)$/.test(s));
+    const segs = relative(appDir, file)
+      .split(/[\\/]/)
+      .slice(0, -1)
+      .filter((s) => !/^\(.*\)$/.test(s));
     return { route: `/${segs.join("/")}`, file };
   })
   .filter((p) => !skipRoutes.has(p.route));
@@ -107,7 +107,8 @@ const reports = pages.map(({ route, file }) => {
     matched: matched.length,
     skipReasons: a.skips,
     missing,
-    coverage: text.length > 0 ? Math.round((matched.length / text.length) * 100) : hasJson ? 100 : 0,
+    coverage:
+      text.length > 0 ? Math.round((matched.length / text.length) * 100) : hasJson ? 100 : 0,
   };
 });
 
@@ -128,7 +129,9 @@ if (jsonOutput) {
     if (!r.hasJson) console.log("   JSON: MISSING");
     else {
       console.log(`   JSON: ${r.textFields} text fields / ${r.totalFields} total`);
-      console.log(`   data-content attrs: ${r.dataContentAttrs}${r.dynamicAttrs ? ` (${r.dynamicAttrs} dynamic)` : ""}`);
+      console.log(
+        `   data-content attrs: ${r.dataContentAttrs}${r.dynamicAttrs ? ` (${r.dynamicAttrs} dynamic)` : ""}`,
+      );
       console.log(`   Coverage: ${r.coverage}%  (${r.matched}/${r.textFields} matched statically)`);
       if (r.missing.length > 0) {
         console.log("   Missing data-content for:");
@@ -139,9 +142,14 @@ if (jsonOutput) {
     if (r.skipReasons.length > 0) console.log(`   Skipped sections: ${r.skipReasons.join(", ")}`);
     console.log();
   }
-  const pct = totals.totalTextFields > 0 ? Math.round((totals.coveredFields / totals.totalTextFields) * 100) : 100;
+  const pct =
+    totals.totalTextFields > 0
+      ? Math.round((totals.coveredFields / totals.totalTextFields) * 100)
+      : 100;
   console.log("SUMMARY\n-------");
   console.log(`  Pages in content system: ${totals.pagesInSystem}/${totals.totalPages}`);
-  console.log(`  Text fields with data-content: ${totals.coveredFields}/${totals.totalTextFields} (${pct}%)`);
+  console.log(
+    `  Text fields with data-content: ${totals.coveredFields}/${totals.totalTextFields} (${pct}%)`,
+  );
   console.log(`  Intentionally skipped sections: ${totals.skippedSections}\n`);
 }

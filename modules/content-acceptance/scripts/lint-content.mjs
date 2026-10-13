@@ -25,10 +25,7 @@ const root = rootIdx >= 0 ? args[rootIdx + 1] : process.cwd();
 
 const cfgPath = join(root, "content-acceptance.config.json");
 const cfg = existsSync(cfgPath) ? JSON.parse(readFileSync(cfgPath, "utf-8")) : {};
-const appDir = join(
-  root,
-  cfg.appDir ?? (existsSync(join(root, "src/app")) ? "src/app" : "app"),
-);
+const appDir = join(root, cfg.appDir ?? (existsSync(join(root, "src/app")) ? "src/app" : "app"));
 const contentDir = join(root, cfg.contentDir ?? "content");
 const skipRoutes = new Set(cfg.skipRoutes ?? ["/admin", "/admin/callback"]);
 const routeOverrides = cfg.routes ?? {};
@@ -101,13 +98,17 @@ for (const { route, file } of discoverPages()) {
   const rel = relative(root, file);
 
   if (!existsSync(join(contentDir, `${key}.json`))) {
-    console.log(`⚠  ${route} → content key "${key}"\n   Missing ${relative(root, contentDir)}/${key}.json\n`);
+    console.log(
+      `⚠  ${route} → content key "${key}"\n   Missing ${relative(root, contentDir)}/${key}.json\n`,
+    );
     warnings++;
   }
 
   const bare = scanBareText(file);
   if (bare.length > 0) {
-    console.log(`⚠  ${route} (${rel})\n   ${bare.length} bare text string(s) not in content system:`);
+    console.log(
+      `⚠  ${route} (${rel})\n   ${bare.length} bare text string(s) not in content system:`,
+    );
     for (const b of bare) console.log(`     line ${b.line}: "${b.text}"`);
     console.log();
     warnings++;
@@ -115,8 +116,6 @@ for (const { route, file } of discoverPages()) {
 }
 
 console.log(
-  warnings === 0
-    ? "✓  All pages follow the content model.\n"
-    : `${warnings} warning(s) found.\n`,
+  warnings === 0 ? "✓  All pages follow the content model.\n" : `${warnings} warning(s) found.\n`,
 );
 if (strict && warnings > 0) process.exit(1);

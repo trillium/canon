@@ -20,8 +20,8 @@
  * Agents may never accept: `accept` refuses without an interactive terminal and
  * refuses when CI / CLAUDECODE / AGENT is set. Accepting is a human act.
  */
-import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -34,13 +34,28 @@ const contentDir = join(root, opt("--content-dir", "content"));
 const sidecarPath = join(contentDir, ".accepted.json");
 
 // Keys that are not copywriting (links, images, SEO). Extend per project.
-const STRUCTURAL_KEYS = new Set(["type", "rows", "href", "src", "alt", "img", "metadata", "id", "importance", "importanceReason", "signals"]);
+const STRUCTURAL_KEYS = new Set([
+  "type",
+  "rows",
+  "href",
+  "src",
+  "alt",
+  "img",
+  "metadata",
+  "id",
+  "importance",
+  "importanceReason",
+  "signals",
+]);
 
 const fieldHash = (v) => createHash("sha256").update(v).digest("hex").slice(0, 12);
 
 function collect(value, prefix, out) {
   if (typeof value === "string") out[prefix] = value;
-  else if (Array.isArray(value)) value.forEach((v, i) => collect(v, `${prefix}[${i}]`, out));
+  else if (Array.isArray(value))
+    value.forEach((v, i) => {
+      collect(v, `${prefix}[${i}]`, out);
+    });
   else if (value && typeof value === "object") {
     for (const [k, v] of Object.entries(value)) {
       if (!STRUCTURAL_KEYS.has(k)) collect(v, prefix ? `${prefix}.${k}` : k, out);
@@ -57,7 +72,8 @@ function currentFields() {
   return out;
 }
 
-const readSidecar = () => (existsSync(sidecarPath) ? JSON.parse(readFileSync(sidecarPath, "utf-8")) : {});
+const readSidecar = () =>
+  existsSync(sidecarPath) ? JSON.parse(readFileSync(sidecarPath, "utf-8")) : {};
 const writeSidecar = (d) => {
   const sorted = Object.fromEntries(Object.entries(d).sort(([a], [b]) => a.localeCompare(b)));
   writeFileSync(sidecarPath, `${JSON.stringify(sorted, null, 2)}\n`);
@@ -69,7 +85,9 @@ function unaccepted(fields, accepted) {
 
 function assertHuman() {
   if (process.env.CI || process.env.CLAUDECODE || process.env.AGENT || !process.stdin.isTTY) {
-    console.error("Refusing to accept: acceptance is a human act (needs an interactive terminal, no CI/agent env).");
+    console.error(
+      "Refusing to accept: acceptance is a human act (needs an interactive terminal, no CI/agent env).",
+    );
     process.exit(3);
   }
   try {
@@ -84,12 +102,18 @@ function acceptPaths(paths, fields, accepted, email) {
   for (const p of paths) {
     const hash = fieldHash(fields[p]);
     const prev = accepted[p];
-    accepted[p] = { hash, by: prev?.hash === hash ? [...new Set([...prev.by, email])] : [email], at };
+    accepted[p] = {
+      hash,
+      by: prev?.hash === hash ? [...new Set([...prev.by, email])] : [email],
+      at,
+    };
   }
 }
 
 if (!cmd || !existsSync(contentDir)) {
-  console.error(`Usage: content-acceptance.mjs <status|accept|unaccept|prune|gate> (content dir: ${contentDir})`);
+  console.error(
+    `Usage: content-acceptance.mjs <status|accept|unaccept|prune|gate> (content dir: ${contentDir})`,
+  );
   process.exit(2);
 }
 
@@ -99,7 +123,17 @@ const pending = unaccepted(fields, accepted);
 
 if (cmd === "status") {
   if (flag("--json")) {
-    console.log(JSON.stringify({ total: Object.keys(fields).length, totalUnaccepted: pending.length, unaccepted_fields: pending }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          total: Object.keys(fields).length,
+          totalUnaccepted: pending.length,
+          unaccepted_fields: pending,
+        },
+        null,
+        2,
+      ),
+    );
   } else {
     console.log(`${pending.length} of ${Object.keys(fields).length} fields unaccepted`);
     for (const p of pending) console.log(`  - ${p}`);
@@ -114,7 +148,11 @@ if (cmd === "status") {
       : [target];
   const bad = paths.filter((p) => !(p in fields));
   if (bad.length || paths.length === 0 || paths[0] === undefined) {
-    console.error(bad.length ? `Unknown field: ${bad.join(", ")}` : "Nothing to accept (give a path, --page <page>, or --all).");
+    console.error(
+      bad.length
+        ? `Unknown field: ${bad.join(", ")}`
+        : "Nothing to accept (give a path, --page <page>, or --all).",
+    );
     process.exit(2);
   }
   acceptPaths(paths, fields, accepted, email);

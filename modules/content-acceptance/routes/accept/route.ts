@@ -13,10 +13,7 @@ export async function POST(req: NextRequest) {
 
   const body = (await req.json()) as { path?: string; value?: string };
   if (!body.path || typeof body.value !== "string") {
-    return NextResponse.json(
-      { error: "Provide {path, value} to accept a field" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Provide {path, value} to accept a field" }, { status: 400 });
   }
 
   const [page, ...rest] = body.path.split(".");
