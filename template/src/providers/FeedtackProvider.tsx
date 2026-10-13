@@ -12,7 +12,7 @@ interface FeedtackProviderProps {
 const adapter = new WebhookAdapter({
   submitUrl: "/api/feedtack",
   loadFeedback: async (filter) => {
-    const res = await fetch(`/api/feedtack?pathname=${filter?.pathname ?? ""}`);
+    const res = await fetch(`/api/feedtack?pathname=${encodeURIComponent(filter?.pathname ?? "")}`);
     return res.ok ? res.json() : [];
   },
 });
