@@ -20,10 +20,7 @@ async function handlePostHogProxy(request: NextRequest): Promise<Response> {
 
   let targetUrl: URL;
   if (pathname.startsWith("/ingest/static/")) {
-    targetUrl = new URL(
-      pathname.replace("/ingest/static/", "/static/"),
-      POSTHOG_ASSETS,
-    );
+    targetUrl = new URL(pathname.replace("/ingest/static/", "/static/"), POSTHOG_ASSETS);
   } else {
     targetUrl = new URL(pathname.replace("/ingest", ""), POSTHOG_API);
   }
@@ -36,10 +33,7 @@ async function handlePostHogProxy(request: NextRequest): Promise<Response> {
   const response = await fetch(targetUrl, {
     method: request.method,
     headers,
-    body:
-      request.method === "GET" || request.method === "HEAD"
-        ? undefined
-        : await request.blob(),
+    body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.blob(),
   });
 
   const responseHeaders = new Headers(response.headers);

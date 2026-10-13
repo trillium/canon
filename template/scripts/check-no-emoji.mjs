@@ -26,10 +26,9 @@ if (files.length === 0) process.exit(0);
 let failed = false;
 
 // Get the unified diff (no context) for only the staged files
-const diff = execSync(
-  `git diff --cached -U0 -- ${files.map((f) => `'${f}'`).join(" ")}`,
-  { encoding: "utf8" },
-);
+const diff = execSync(`git diff --cached -U0 -- ${files.map((f) => `'${f}'`).join(" ")}`, {
+  encoding: "utf8",
+});
 
 let currentFile = "";
 
@@ -55,8 +54,6 @@ for (const line of diff.split("\n")) {
 }
 
 if (failed) {
-  console.error(
-    "\nEmoji guard: replace raw emoji with lucide-react SVG icons.",
-  );
+  console.error("\nEmoji guard: replace raw emoji with lucide-react SVG icons.");
   process.exit(1);
 }
