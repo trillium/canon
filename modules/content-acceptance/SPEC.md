@@ -22,8 +22,9 @@ import { home } from "@/content";
 - **Allowed:** variables, numbers, punctuation and symbols (`→ • ×`), entities (`&nbsp;`), non-copy props (`className`, `href`, `type`, …), and anything in the content directory, test, spec or stories files.
 - **Enforced twice:** Biome `style.noJsxLiterals` (error; off in test files) via `pnpm lint`, and `scripts/lint-literals.mjs` — run on staged files by lint-staged, and over the whole source tree by `pnpm lint:literals` / CI. Exit 1 on any violation.
 - **Escape hatches** are rare, always carry a reason, and are listed in the lint output so reviewers see every one:
-  - one line: `{/* content-ok: reason */}` on the same line or the line above (`// content-ok: reason` in plain code)
+  - one line: `{/* content-ok: reason */}` on the same line, or alone on the line above (`// content-ok: reason` in plain code)
   - a subtree: `<div data-content-skip="reason">…</div>`
+  - Biome does not honor either hatch: pair each with a `biome-ignore lint/style/noJsxLiterals: <reason>` comment, or `pnpm lint` still fails.
   - a bare `content-ok` or an empty `data-content-skip` is itself a violation. Valid reasons match the `data-content-skip` list above (derived content, external feeds, structural UI text, brand names).
 - Because copy now lives in JSON, the acceptance rules apply to every visible string: editing a JSON value changes its hash, so the field is unaccepted until a human accepts it again.
 

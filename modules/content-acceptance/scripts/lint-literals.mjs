@@ -118,6 +118,7 @@ function scan(file) {
   function escapeFor(pos) {
     const l = lineOf(pos);
     for (const i of [l, l - 1]) {
+      if (i !== l && !/^\s*(?:\{\s*)?(?:\/\/|\/\*)/.test(lines[i] ?? "")) continue;
       const m = lines[i]?.match(/content-ok(?::[ \t]*(\S[^*]*?))?[ \t]*(?:\*\/|$)/);
       if (m) return { line: i + 1, reason: m[1]?.trim() };
     }
