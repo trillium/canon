@@ -71,6 +71,8 @@ jobs:
             diff "modules/design-system/$f" "template/$f"
           done
 
+      - uses: oven-sh/setup-bun@v2
+
       - name: Verify template builds
         working-directory: template
         run: |
