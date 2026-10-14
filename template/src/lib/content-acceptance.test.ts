@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { collectFields, STRUCTURAL_KEYS } from "./content-acceptance";
+import { collectFields, fieldHash, STRUCTURAL_KEYS } from "./content-acceptance";
 
 const script = resolve(process.cwd(), "scripts/content-acceptance.mjs");
 
@@ -60,6 +60,40 @@ describe("sidecar gate", () => {
       }),
     );
     expect(run(["gate", "--hard"]).status).toBe(0);
+  });
+});
+
+describe("editing content JSON", () => {
+  const accept = (path: string, value: string) =>
+    writeFileSync(
+      join(root, "content", ".accepted.json"),
+      JSON.stringify({ [path]: { hash: fieldHash(value), by: ["a@example.com"], at: "x" } }),
+    );
+  const unaccepted = () =>
+    (JSON.parse(run(["status", "--json"]).stdout) as { unaccepted_fields: string[] })
+      .unaccepted_fields;
+
+  it("flips an accepted field to unaccepted", () => {
+    writePage("home", { hero: { heading: "Hello" } });
+    accept("home.hero.heading", "Hello");
+    expect(unaccepted()).toEqual([]);
+
+    writePage("home", { hero: { heading: "Hello, world" } });
+    expect(unaccepted()).toEqual(["home.hero.heading"]);
+    expect(run(["gate", "--hard"]).status).toBe(1);
+  });
+
+  it("leaves untouched fields accepted", () => {
+    writePage("home", { hero: { heading: "Hello", sub: "World" } });
+    writeFileSync(
+      join(root, "content", ".accepted.json"),
+      JSON.stringify({
+        "home.hero.heading": { hash: fieldHash("Hello"), by: ["a@example.com"], at: "x" },
+        "home.hero.sub": { hash: fieldHash("World"), by: ["a@example.com"], at: "x" },
+      }),
+    );
+    writePage("home", { hero: { heading: "Hello", sub: "Planet" } });
+    expect(unaccepted()).toEqual(["home.hero.sub"]);
   });
 });
 

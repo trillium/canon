@@ -8,6 +8,25 @@ A field of copy is *accepted* when a human has confirmed the exact current text.
 - Every rendered copy string carries `data-content="page.section.field"`, or lives under `data-content-skip="reason"`. Valid skip reasons: content derived from other sources, structural UI text ("Learn more →"), external feeds, infrastructure pages.
 - Structural keys (`href`, `src`, `alt`, `img`, `type`, `rows`, `metadata`, …) are not copywriting and are excluded from acceptance. Extend the set per project, in one place.
 
+## No literal text in components
+
+Component files (`.tsx`/`.jsx`) contain no user-visible literal text. Every string is a variable imported from a JSON content file (`src/content/<page>.json`, re-exported by `src/content/index.ts`).
+
+```tsx
+import { home } from "@/content";
+<h1 data-content="home.heading">{home.heading}</h1>   // good
+<h1>Welcome</h1>                                      // violation
+```
+
+- **Flagged:** JSX text containing a letter; string/template literals rendered as JSX children (`{"Hi"}`, `{ok ? "Yes" : "No"}`); string literals in copy props (`placeholder`, `title`, `alt`, `label`, `aria-label`, `aria-description`, `aria-placeholder`, `aria-roledescription`).
+- **Allowed:** variables, numbers, punctuation and symbols (`→ • ×`), entities (`&nbsp;`), non-copy props (`className`, `href`, `type`, …), and anything in the content directory, test, spec or stories files.
+- **Enforced twice:** Biome `style.noJsxLiterals` (error; off in test files) via `pnpm lint`, and `scripts/lint-literals.mjs` — run on staged files by lint-staged, and over the whole source tree by `pnpm lint:literals` / CI. Exit 1 on any violation.
+- **Escape hatches** are rare, always carry a reason, and are listed in the lint output so reviewers see every one:
+  - one line: `{/* content-ok: reason */}` on the same line or the line above (`// content-ok: reason` in plain code)
+  - a subtree: `<div data-content-skip="reason">…</div>`
+  - a bare `content-ok` or an empty `data-content-skip` is itself a violation. Valid reasons match the `data-content-skip` list above (derived content, external feeds, structural UI text, brand names).
+- Because copy now lives in JSON, the acceptance rules apply to every visible string: editing a JSON value changes its hash, so the field is unaccepted until a human accepts it again.
+
 ## Colocated records
 
 Keep each page's or component's content record next to the component that renders it, not in one far-away file:

@@ -8,11 +8,11 @@
 - [ ] A11y rules enumerated at warn level (13 explicit rules, `noBlankTarget` at error)
 - [ ] Correctness rules: `noUnusedImports`, `useExhaustiveDependencies`, `useHookAtTopLevel`, `noInvalidUseBeforeDeclaration` at warn
 - [ ] Suspicious rules: `noExplicitAny`, `noArrayIndexKey` at warn
-- [ ] Style rules: `useConst` at error, `useImportType` and `noNonNullAssertion` at warn
+- [ ] Style rules: `useConst` and `noJsxLiterals` at error, `useImportType` and `noNonNullAssertion` at warn (`noJsxLiterals` pairs with the `content-acceptance` module)
 - [ ] Complexity rules: `noUselessFragments`, `noCommaOperator` at warn
 - [ ] Performance rules: `noImgElement` at warn (catches `<img>` vs Next.js `<Image>`)
 - [ ] Security rule `noDangerouslySetInnerHtml` set to `error`
-- [ ] Test file overrides: `noExplicitAny` off in `*.test.ts`, `*.test.tsx`, `**/__tests__/**`
+- [ ] Test file overrides: `noExplicitAny` and `noJsxLiterals` off in `*.test.ts`, `*.test.tsx`, `**/__tests__/**`
 - [ ] Import organization enabled via `assist`
 - [ ] Formatter: double quotes, 2-space indent
 - [ ] CSS support enabled with Tailwind directives

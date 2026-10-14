@@ -7,14 +7,17 @@ Two variants — pick one per project:
 - **Database variant** (Supabase `page_content` + admin edit UI): `lib/`, `routes/`, `supabase/`
 - **Sidecar variant** (static site, content in git): `sidecar/content-acceptance.mjs`
 
-Both variants share the `scripts/` lint and report tools.
+Both variants share the `scripts/` lint and report tools, and the no-literal-text rule.
 
 ## Check
 
 - [ ] Every visible copy string is backed by `data-content="page.section.field"` (arrays: `field[i]`) or sits inside `data-content-skip="reason"`
+- [ ] Component files (`.tsx`/`.jsx`) contain no literal user-visible text — every string is a variable imported from a JSON content file (`node scripts/lint-literals.mjs` exits 0)
+- [ ] Every `content-ok` / `data-content-skip` escape hatch has a reason and appears in the lint output
 - [ ] Each page/component's content record is colocated with its component; the aggregate JSON is generated from them (see SPEC, "Colocated records")
-- [ ] `scripts/lint-content.mjs` and `scripts/content-report.mjs` exist and are byte-identical to this module's
-- [ ] `package.json` has `"lint:content"` and `"content:report"` scripts
+- [ ] `scripts/lint-content.mjs`, `scripts/lint-literals.mjs` and `scripts/content-report.mjs` exist and are byte-identical to this module's
+- [ ] `package.json` has `"lint:content"`, `"lint:literals"` and `"content:report"` scripts, and lint-staged runs `node scripts/lint-literals.mjs` on `*.{ts,tsx}`
+- [ ] `biome.json` has `style.noJsxLiterals` at `error` (off only for test files) — comes from the `linting` module
 - [ ] Database variant: `src/lib/content-acceptance.ts` exports `fieldHash` (sha256, 12 hex chars), `STRUCTURAL_KEYS`, `collectFields`, `unacceptedFields`
 - [ ] Database variant: `page_content.accepted_fields` jsonb column exists (`{ "section.field": { hash, by[], at } }`)
 - [ ] Database variant: `GET /api/content/status`, `POST`/`DELETE /api/content/accept` exist and are gated by `requireAdmin` (human session only — no API-key, service-token or header bypass)
@@ -27,13 +30,15 @@ Both variants share the `scripts/` lint and report tools.
 
 ## Apply
 
-1. Mark up copy: add `data-content="page.section.field"` to every text element, `data-content-skip="reason"` to intentionally non-editable regions (derived content, structural UI text, external feeds)
+1. Move every literal string out of components into `src/content/<page>.json`, re-export from `src/content/index.ts`, and render `{page.field}`. Then mark up copy: add `data-content="page.section.field"` to every text element, `data-content-skip="reason"` to intentionally non-editable regions (derived content, structural UI text, external feeds)
 2. Colocate one JSON record per component/page beside its source file, with a generator that builds the aggregate; put `importance`, `importanceReason` and `signals` keys in `STRUCTURAL_KEYS`
-3. Copy `scripts/lint-content.mjs` and `scripts/content-report.mjs` to `scripts/`; add to `package.json`:
+3. Copy `scripts/lint-content.mjs`, `scripts/lint-literals.mjs` and `scripts/content-report.mjs` to `scripts/`; add to `package.json`:
    ```json
    "lint:content": "node scripts/lint-content.mjs",
+   "lint:literals": "node scripts/lint-literals.mjs",
    "content:report": "node scripts/content-report.mjs"
    ```
+   and add `"node scripts/lint-literals.mjs"` to the `*.{ts,tsx}` lint-staged entry. Run `pnpm lint:literals` in CI.
 4. Optional: add `content-acceptance.config.json` at the project root (`appDir`, `contentDir`, `skipRoutes`, `routes` overrides) — see the header of `lint-content.mjs`
 5. **Database variant:**
    1. Copy `lib/content-acceptance.ts` and `lib/require-admin.ts` to `src/lib/`; extend `STRUCTURAL_KEYS` for the project
@@ -48,6 +53,7 @@ Both variants share the `scripts/` lint and report tools.
 ## Conflicts
 
 - Project already has a CMS or approval flow — keep it; only add the `data-content` convention and map its approvals onto `{hash, by, at}` records if feasible
+- Existing codebase with many literals — fix in one sweep per page; use `{/* content-ok: reason */}` only for true exceptions (brand names, external feeds), never to defer the migration
 - Content is not JSON-per-page (MDX, database rows) — adapt `collectFields` input; keep the hash and record shape unchanged
 - Route-to-content-key differs from the default (`/` → `home`, `/a/b` → `a-b`) — add `routes` overrides in `content-acceptance.config.json`
 - Project already defines other `STRUCTURAL_KEYS`-like exclusions — merge them into one list so status, deploy gate and report agree

@@ -50,6 +50,9 @@ jobs:
       - name: Check content-acceptance scripts/lint-content.mjs matches template
         run: diff modules/content-acceptance/scripts/lint-content.mjs template/scripts/lint-content.mjs
 
+      - name: Check content-acceptance scripts/lint-literals.mjs matches template
+        run: diff modules/content-acceptance/scripts/lint-literals.mjs template/scripts/lint-literals.mjs
+
       - name: Check content-acceptance scripts/content-report.mjs matches template
         run: diff modules/content-acceptance/scripts/content-report.mjs template/scripts/content-report.mjs
 
@@ -76,3 +79,5 @@ jobs:
           pnpm run type-check
           pnpm run lint
           pnpm run build
+          pnpm run lint:literals
+          pnpm exec vitest --run
