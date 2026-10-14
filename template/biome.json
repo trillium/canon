@@ -44,7 +44,8 @@
       "style": {
         "useConst": "error",
         "useImportType": "warn",
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "warn",
+        "noJsxLiterals": "error"
       },
       "complexity": {
         "noUselessFragments": "warn",
@@ -100,6 +101,9 @@
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
+          },
+          "style": {
+            "noJsxLiterals": "off"
           }
         }
       }

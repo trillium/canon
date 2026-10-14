@@ -1,4 +1,5 @@
 /* ds-ignore-file */
+// biome-ignore-all lint/style/noJsxLiterals: scaffold documentation page, copy is edited in place
 import { DS_RULES } from "@/components/ui/manifest";
 
 export const metadata = { title: "Design System" };
@@ -28,7 +29,10 @@ const OPT_OUTS = [
 
 export default function DesignSystemPage() {
   return (
-    <main className="mx-auto max-w-4xl space-y-12 p-8">
+    <main
+      className="mx-auto max-w-4xl space-y-12 p-8"
+      data-content-skip="design-system documentation page"
+    >
       <header>
         <h1 className="text-3xl font-bold">Design System</h1>
         <p className="mt-2 text-sm opacity-70">

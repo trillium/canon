@@ -105,6 +105,7 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Environment-aware (dev/staging/prod)
 
 ### Content Acceptance
+- Component files contain **no literal text**: every user-visible string is a variable imported from a JSON content file (enforced by Biome `noJsxLiterals` + `scripts/lint-literals.mjs`, pre-commit and CI)
 - Copy is JSON per page, colocated with its component; every string carries `data-content="page.section.field"` or `data-content-skip="reason"`
 - Human sign-off per field: `{hash, by, at}` records, `fieldHash` = sha256 truncated to 12 hex; unaccepted = missing or hash mismatch; edits invalidate
 - Deploy gate warns by default, hard-blocks with `CONTENT_ACCEPTANCE_GATE=hard`

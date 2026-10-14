@@ -1,7 +1,9 @@
+import { home } from "@/content";
+
 export default function Home() {
   return (
     <main>
-      <h1>Canon Template</h1>
+      <h1 data-content="home.heading">{home.heading}</h1>
     </main>
   );
 }
