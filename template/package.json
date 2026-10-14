@@ -19,7 +19,8 @@
     "prepare": "husky",
     "lint:content": "node scripts/lint-content.mjs",
     "content:report": "node scripts/content-report.mjs",
-    "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'"
+    "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'",
+    "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
@@ -69,6 +70,12 @@
       "node scripts/check-no-emoji.mjs",
       "bash scripts/tsc-staged.sh"
     ],
+    "*.{jsx,tsx}": "bun scripts/check-design-system.ts --staged-only",
+    "src/components/ui/**": [
+      "bun scripts/check-ds-coverage.ts",
+      "bun scripts/check-ds-page.ts"
+    ],
+    "src/app/design-system/**": "bun scripts/check-ds-page.ts",
     "*.{md,mdx}": "cspell lint --no-must-find-files"
   }
 }

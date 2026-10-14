@@ -82,14 +82,15 @@ Apply modules in this order to avoid dependency issues:
 1. `linting` — foundational, other modules assume biome
 2. `hooks` — depends on linting config
 3. `styling` — many modules reference tailwind/shadcn
-4. `auth` — feedtack and other modules may depend on auth
-5. `testing` — can validate other modules
-6. `ci` — validates everything
-7. `feedtack` — depends on auth, styling
-8. `email` — depends on auth
-9. `analytics` — independent, safe to add anytime
-10. `errors` — independent, safe to add anytime
-11. `content-acceptance` — only for projects with editable copy; database variant depends on auth
+4. `design-system` — depends on linting, hooks, styling; enable rules one at a time as components exist
+5. `auth` — feedtack and other modules may depend on auth
+6. `testing` — can validate other modules
+7. `ci` — validates everything
+8. `feedtack` — depends on auth, styling
+9. `email` — depends on auth
+10. `analytics` — independent, safe to add anytime
+11. `errors` — independent, safe to add anytime
+12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
 
 ## Notes
 

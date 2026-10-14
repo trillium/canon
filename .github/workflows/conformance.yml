@@ -59,6 +59,15 @@ jobs:
       - name: Check content-acceptance supabase/migration.sql matches template
         run: diff modules/content-acceptance/supabase/migration.sql template/supabase/migrations/00002_content_acceptance.sql
 
+      - name: Check design-system module matches template
+        run: |
+          for f in scripts/check-design-system.ts scripts/check-ds-coverage.ts scripts/check-ds-page.ts \
+            src/components/ui/manifest.ts src/components/ui/manifest.config.ts \
+            src/app/design-system/page.tsx \
+            src/test/design-system-enforcement.test.ts .claude/settings.json; do
+            diff "modules/design-system/$f" "template/$f"
+          done
+
       - name: Verify template builds
         working-directory: template
         run: |
