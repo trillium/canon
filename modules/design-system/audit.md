@@ -10,7 +10,18 @@ Layout: files below use the `src/` layout. In a project whose `components/` and 
 - [ ] `src/components/ui/manifest.config.ts` exists (the per-project file: `ENABLED_RULES`, `PRESET_OVERRIDES`, `CUSTOM_RULES`)
 - [ ] `scripts/check-design-system.ts`, `scripts/check-ds-coverage.ts` and `scripts/check-ds-page.ts` exist and are identical to this module's copies
 - [ ] `src/app/design-system/page.tsx` exists and serves `/design-system`
-- [ ] The page renders the manifest rules table, shows token swatches and the type scale, has a live example of every manifest component, and lists the opt-out directives
+- [ ] The page has all eight sections, each an element with the id shown (`bun scripts/check-ds-page.ts` enforces the ids and that every manifest component is named):
+  - [ ] **Principles** (`ds-principles`) — the rules that settle design arguments
+  - [ ] **Foundations** (`ds-foundations`) — color, type scale, spacing/grid, radius, elevation, motion, iconography
+  - [ ] **Tokens** (`ds-tokens`) — semantic names with light and dark values
+  - [ ] **Components** (`ds-components`) — per component: name, description, props/variants, states, usage do/don't, code example, live demo
+  - [ ] **Patterns** (`ds-patterns`) — layouts and flows built from the components
+  - [ ] **Content guidelines** (`ds-content`) — voice, tone, microcopy
+  - [ ] **Accessibility** (`ds-accessibility`) — contrast, focus, motion
+  - [ ] **Governance** (`ds-governance`) — add/change process, opt-out directives, enforcement rules table (rendered from the manifest), owner
+- [ ] Enforcement blocks rather than warns: the pre-commit hook exits non-zero on a violation, pre-push re-runs the full sweep, the CI `design-system` job fails the PR (this catches `git commit --no-verify`), and hooks install automatically through `"prepare": "husky"` on `pnpm install` / `bun install`
+- [ ] `src/test/design-system-enforcement.test.ts` exists, is identical to this module's copy, and passes — it proves a commit with a raw `<div>` is rejected
+- [ ] The `test` job in `ci.yml` has `oven-sh/setup-bun` (the enforcement test shells out to `bun`)
 - [ ] `package.json` has a `check:ds` script running all three scripts
 - [ ] `lint-staged` runs `bun scripts/check-design-system.ts --staged-only` on `*.{jsx,tsx}`
 - [ ] `lint-staged` runs `check-ds-coverage.ts` and `check-ds-page.ts` on `src/components/ui/**`, and `check-ds-page.ts` on `src/app/design-system/**`
@@ -24,7 +35,8 @@ Layout: files below use the `src/` layout. In a project whose `components/` and 
 
 1. Copy `src/components/ui/manifest.ts` and `src/components/ui/manifest.config.ts` from this module to the project.
 2. Copy `scripts/check-design-system.ts`, `scripts/check-ds-coverage.ts` and `scripts/check-ds-page.ts` from this module.
-3. Copy `src/app/design-system/page.tsx`. Add colour swatches, the type scale and a live example of every manifest component as components are added.
+3. Copy `src/app/design-system/page.tsx` and replace each TODO section with the project's real content: swatches and the type scale under Foundations, semantic tokens with light/dark values under Tokens, and a live example of every manifest component under Components.
+3a. Copy `src/test/design-system-enforcement.test.ts` and add `oven-sh/setup-bun` to the `test` job in `ci.yml`.
 4. Add the scripts and lint-staged entries to `package.json` (merge into the existing arrays — see the hooks module):
    ```json
    "scripts": {
@@ -70,6 +82,10 @@ Layout: files below use the `src/` layout. In a project whose `components/` and 
 | `/* ds-ignore-file */` | Whole file | Skips all design-system rules (OG image routes, the catalogue page, the manifest) |
 
 Rules with `noEscapeHatch: true` ignore all three.
+
+### What a design system contains
+
+A design system is the shared vocabulary of a product: principles, the visual foundations built into tokens, the components assembled from them, the patterns that combine components, the content rules for the words, the accessibility floor, and the governance that keeps it all from drifting. Sources: [Design Systems 101](https://www.nngroup.com/articles/design-systems-101/) (Nielsen Norman Group), [designsystems.com](https://www.designsystems.com/). The `/design-system` page is where all of it lives, in the eight sections listed under Check.
 
 ## Conflicts
 

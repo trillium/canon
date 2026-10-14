@@ -45,6 +45,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+      - uses: oven-sh/setup-bun@v2
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test -- --run
 

@@ -7,9 +7,13 @@
  * `component` field, e.g. `<Box> or <Stack>` -> Box, Stack) occurs in the source
  * of `app/design-system/page.tsx` or any file beside it.
  *
+ * The page must also contain the eight required sections, each marked with an id:
+ *   ds-principles, ds-foundations, ds-tokens, ds-components,
+ *   ds-patterns, ds-content, ds-accessibility, ds-governance
+ *
  * Exit codes:
- *   0  page exists and documents every manifest component
- *   1  page is missing or components are missing from it
+ *   0  page exists, has every required section and documents every manifest component
+ *   1  page is missing, sections are missing, or components are missing from it
  *   2  setup problem
  */
 
@@ -25,6 +29,16 @@ interface DsRule {
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const UI_DIR_CANDIDATES = ["src/components/ui", "components/ui"];
 const PAGE_DIR_CANDIDATES = ["src/app/design-system", "app/design-system"];
+const REQUIRED_SECTIONS = [
+  "ds-principles",
+  "ds-foundations",
+  "ds-tokens",
+  "ds-components",
+  "ds-patterns",
+  "ds-content",
+  "ds-accessibility",
+  "ds-governance",
+];
 
 function firstExisting(candidates: string[], marker: string): string | null {
   for (const candidate of candidates) {
@@ -76,15 +90,30 @@ for (const rule of DS_RULES) {
   }
 }
 
-if (missing.size === 0) process.exit(0);
+const missingSections = REQUIRED_SECTIONS.filter(
+  (id) => !new RegExp(`\\bid=(?:"${id}"|'${id}'|\\{["']${id}["']\\})`).test(pageSource),
+);
 
-process.stderr.write(
-  `check-ds-page: ${missing.size} manifest component(s) missing from ${relative(ROOT, pageDir)}/\n\n`,
-);
-for (const [name, ruleNames] of missing) {
-  process.stderr.write(`  ${name}  (rule: ${ruleNames.join(", ")})\n`);
+if (missing.size === 0 && missingSections.length === 0) process.exit(0);
+
+if (missingSections.length > 0) {
+  process.stderr.write(
+    `check-ds-page: ${missingSections.length} required section(s) missing from ${relative(ROOT, pageDir)}/\n\n`,
+  );
+  for (const id of missingSections) process.stderr.write(`  id="${id}"\n`);
+  process.stderr.write(
+    "\nThe page needs: Principles, Foundations, Tokens, Components, Patterns, Content guidelines, Accessibility, Governance — each as an element with the id above.\n\n",
+  );
 }
-process.stderr.write(
-  "\nAdd a live example of each component to the /design-system page, so developers can find what to reach for.\n",
-);
+if (missing.size > 0) {
+  process.stderr.write(
+    `check-ds-page: ${missing.size} manifest component(s) missing from ${relative(ROOT, pageDir)}/\n\n`,
+  );
+  for (const [name, ruleNames] of missing) {
+    process.stderr.write(`  ${name}  (rule: ${ruleNames.join(", ")})\n`);
+  }
+  process.stderr.write(
+    "\nAdd a live example of each component to the /design-system page, so developers can find what to reach for.\n",
+  );
+}
 process.exit(1);

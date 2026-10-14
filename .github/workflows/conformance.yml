@@ -63,7 +63,8 @@ jobs:
         run: |
           for f in scripts/check-design-system.ts scripts/check-ds-coverage.ts scripts/check-ds-page.ts \
             src/components/ui/manifest.ts src/components/ui/manifest.config.ts \
-            src/app/design-system/page.tsx .claude/settings.json; do
+            src/app/design-system/page.tsx \
+            src/test/design-system-enforcement.test.ts .claude/settings.json; do
             diff "modules/design-system/$f" "template/$f"
           done
 

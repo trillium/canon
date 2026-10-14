@@ -3,6 +3,11 @@ import { DS_RULES } from "@/components/ui/manifest";
 
 export const metadata = { title: "Design System" };
 
+/**
+ * The /design-system page has eight required sections. Their ids are checked by
+ * scripts/check-ds-page.ts. Replace each TODO with the project's real content; add a live demo
+ * of every manifest component under Components.
+ */
 const OPT_OUTS = [
   {
     directive: "// ds-ignore",
@@ -32,10 +37,94 @@ export default function DesignSystemPage() {
         </p>
       </header>
 
-      <section aria-labelledby="ds-rules">
-        <h2 id="ds-rules" className="text-2xl font-bold">
-          Enforcement rules
+      <section id="ds-principles" aria-labelledby="ds-principles-title">
+        <h2 id="ds-principles-title" className="text-2xl font-bold">
+          Principles
         </h2>
+        <p className="mt-2 text-sm opacity-70">
+          TODO: the few rules that settle design arguments — what this product values and what it
+          refuses to do.
+        </p>
+      </section>
+
+      <section id="ds-foundations" aria-labelledby="ds-foundations-title">
+        <h2 id="ds-foundations-title" className="text-2xl font-bold">
+          Foundations
+        </h2>
+        <ul className="mt-2 list-disc pl-6 text-sm">
+          <li>Color — palette and usage</li>
+          <li>Type scale — families, sizes, weights, line heights</li>
+          <li>Spacing and grid — spacing scale, breakpoints, layout grid</li>
+          <li>Radius</li>
+          <li>Elevation — shadows and layering</li>
+          <li>Motion — durations, easing, reduced-motion behavior</li>
+          <li>Iconography — icon set, sizes, usage</li>
+        </ul>
+        <p className="mt-2 text-sm opacity-70">TODO: show a swatch or specimen for each.</p>
+      </section>
+
+      <section id="ds-tokens" aria-labelledby="ds-tokens-title">
+        <h2 id="ds-tokens-title" className="text-2xl font-bold">
+          Tokens
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          TODO: list semantic token names (for example <code>--color-surface</code>,{" "}
+          <code>--color-text-muted</code>) with their light and dark values, rendered from the theme
+          in <code>globals.css</code>.
+        </p>
+      </section>
+
+      <section id="ds-components" aria-labelledby="ds-components-title">
+        <h2 id="ds-components-title" className="text-2xl font-bold">
+          Components
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          One entry per manifest component, each with: name, description, props and variants, states
+          (default, hover, focus, disabled, error), usage do and don&apos;t, a code example and a
+          live demo. check-ds-page.ts fails when a manifest component is not named on this page.
+        </p>
+      </section>
+
+      <section id="ds-patterns" aria-labelledby="ds-patterns-title">
+        <h2 id="ds-patterns-title" className="text-2xl font-bold">
+          Patterns
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          TODO: page layouts and multi-component flows (forms, navigation, empty states) built from
+          the components above.
+        </p>
+      </section>
+
+      <section id="ds-content" aria-labelledby="ds-content-title">
+        <h2 id="ds-content-title" className="text-2xl font-bold">
+          Content guidelines
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          TODO: voice, tone and microcopy rules — button labels, error messages, empty states.
+        </p>
+      </section>
+
+      <section id="ds-accessibility" aria-labelledby="ds-accessibility-title">
+        <h2 id="ds-accessibility-title" className="text-2xl font-bold">
+          Accessibility
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          TODO: contrast requirements, focus treatment, and motion preferences (
+          <code>prefers-reduced-motion</code>).
+        </p>
+      </section>
+
+      <section id="ds-governance" aria-labelledby="ds-governance-title">
+        <h2 id="ds-governance-title" className="text-2xl font-bold">
+          Governance
+        </h2>
+        <p className="mt-2 text-sm opacity-70">
+          Owner: TODO. To add or change a component: build it in <code>components/ui</code>,
+          register it in <code>manifest.config.ts</code>, add its entry above, then migrate call
+          sites.
+        </p>
+
+        <h3 className="mt-6 text-lg font-semibold">Enforcement rules</h3>
         {DS_RULES.length === 0 ? (
           <p className="mt-2 text-sm opacity-70">
             No rules enabled yet. Enable presets in <code>components/ui/manifest.config.ts</code> as
@@ -63,29 +152,8 @@ export default function DesignSystemPage() {
             </tbody>
           </table>
         )}
-      </section>
 
-      <section aria-labelledby="ds-tokens">
-        <h2 id="ds-tokens" className="text-2xl font-bold">
-          Tokens
-        </h2>
-        {/* Add colour swatches (from globals.css) and the typography scale here. */}
-      </section>
-
-      <section aria-labelledby="ds-components">
-        <h2 id="ds-components" className="text-2xl font-bold">
-          Components
-        </h2>
-        {/*
-          One live example per manifest component. check-ds-page.ts fails when a component
-          named in the manifest does not appear on this page.
-        */}
-      </section>
-
-      <section aria-labelledby="ds-opt-outs">
-        <h2 id="ds-opt-outs" className="text-2xl font-bold">
-          Opt-out directives
-        </h2>
+        <h3 className="mt-6 text-lg font-semibold">Opt-out directives</h3>
         <table className="mt-4 w-full text-left text-sm">
           <thead>
             <tr>
