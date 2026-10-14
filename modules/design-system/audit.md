@@ -25,7 +25,7 @@ Layout: files below use the `src/` layout. In a project whose `components/` and 
 - [ ] `package.json` has a `check:ds` script running all three scripts
 - [ ] `lint-staged` runs `bun scripts/check-design-system.ts --staged-only` on `*.{jsx,tsx}`
 - [ ] `lint-staged` runs `check-ds-coverage.ts` and `check-ds-page.ts` on `src/components/ui/**`, and `check-ds-page.ts` on `src/app/design-system/**`
-- [ ] `.husky/pre-push` runs `pnpm run check:ds` after the protected-branch guard (skipped in CI, warns when `bun` is missing)
+- [ ] `.husky/pre-push` runs `pnpm run check:ds` after the protected-branch guard (skipped in CI, blocks when `bun` is missing)
 - [ ] `.github/workflows/ci.yml` has a `design-system` job running `pnpm run check:ds` (with `oven-sh/setup-bun`)
 - [ ] `.claude/settings.json` has the `PreToolUse` hook for `Write|Edit|MultiEdit` running `check-design-system.ts --claude-hook`
 - [ ] Every primitive in `src/components/ui/*.tsx` has a manifest entry (`bun scripts/check-ds-coverage.ts` passes)
