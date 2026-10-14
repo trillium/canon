@@ -54,10 +54,8 @@ interface Finding {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const UI_DIR_CANDIDATES = ["src/components/ui", "components/ui"];
-const WALK_SKIP_DIRS = new Set([
-  "node_modules",
-  ".next",
-  ".git",
+const WALK_SKIP_ANYWHERE = new Set(["node_modules", ".next", ".git"]);
+const WALK_SKIP_TOP_LEVEL = new Set([
   ".vercel",
   "dist",
   "build",
@@ -90,7 +88,8 @@ function shouldSkipPath(abs: string, uiDir: string): boolean {
   const rel = relative(ROOT, abs).split(sep).join("/");
   if (rel.startsWith("..")) return true;
   if (abs.startsWith(uiDir + sep)) return true;
-  if (/(^|\/)(node_modules|\.next|scripts|e2e|__tests__)\//.test(rel)) return true;
+  if (/(^|\/)(node_modules|\.next|__tests__)\//.test(rel)) return true;
+  if (/^(scripts|e2e)\//.test(rel)) return true;
   return /\.(test|spec)\.(tsx|jsx)$/.test(rel);
 }
 
@@ -170,7 +169,8 @@ function getStagedLineNumbers(file: string): Set<number> | null {
 
 function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
-    if (WALK_SKIP_DIRS.has(entry)) continue;
+    if (WALK_SKIP_ANYWHERE.has(entry)) continue;
+    if (dir === ROOT && WALK_SKIP_TOP_LEVEL.has(entry)) continue;
     const full = join(dir, entry);
     const stat = statSync(full);
     if (stat.isDirectory()) walk(full, out);

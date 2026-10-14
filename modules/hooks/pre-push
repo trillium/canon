@@ -23,11 +23,12 @@ fi
 
 # --- Design system guard ---
 # Full-repo sweep: lint-staged only sees staged lines, this catches the rest.
-# Skipped when the design-system module is not installed or bun is missing.
+# Skipped when the design-system module is not installed. Blocks if bun is missing.
 if [ -f "scripts/check-design-system.ts" ]; then
   if command -v bun >/dev/null 2>&1; then
     pnpm run --silent check:ds || exit 1
   else
-    echo "warning: bun not installed. Skipping design-system check. (brew install oven-sh/bun/bun)"
+    echo "error: bun is required for the design-system check but is not installed. (brew install oven-sh/bun/bun)"
+    exit 1
   fi
 fi

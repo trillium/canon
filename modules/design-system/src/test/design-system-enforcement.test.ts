@@ -138,6 +138,13 @@ describe("design-system enforcement blocks", () => {
     expect(sweep.output).toContain("src/app/sneaky.tsx");
   }, 30_000);
 
+  it("sweeps nested directories named like top-level skip dirs", () => {
+    write("src/app/build/page.tsx", RAW_DIV);
+    const sweep = run("bun", ["scripts/check-design-system.ts", "--all"]);
+    expect(sweep.status).toBe(1);
+    expect(sweep.output).toContain("src/app/build/page.tsx");
+  }, 30_000);
+
   it("rejects a push containing a raw <div>", () => {
     const push = git("push", "origin", "main");
     expect(push.status).not.toBe(0);
