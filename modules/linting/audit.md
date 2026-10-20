@@ -7,7 +7,7 @@
 - [ ] Rules include `recommended` preset
 - [ ] A11y rules enumerated at warn level (13 explicit rules, `noBlankTarget` at error)
 - [ ] Correctness rules: `noUnusedImports`, `useExhaustiveDependencies`, `useHookAtTopLevel`, `noInvalidUseBeforeDeclaration` at warn
-- [ ] Suspicious rules: `noExplicitAny`, `noArrayIndexKey` at warn
+- [ ] Suspicious rules: `noExplicitAny`, `noArrayIndexKey` at warn; `noRestrictedGlobals` at error denying `alert`, `confirm`, `prompt`
 - [ ] Style rules: `useConst` and `noJsxLiterals` at error, `useImportType` and `noNonNullAssertion` at warn (`noJsxLiterals` pairs with the `content-acceptance` module)
 - [ ] Complexity rules: `noUselessFragments`, `noCommaOperator` at warn
 - [ ] Performance rules: `noImgElement` at warn (catches `<img>` vs Next.js `<Image>`)

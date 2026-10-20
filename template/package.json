@@ -21,7 +21,10 @@
     "content:report": "node scripts/content-report.mjs",
     "lint:literals": "node scripts/lint-literals.mjs",
     "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'",
-    "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts"
+    "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts",
+    "health": "fallow",
+    "health:audit": "fallow audit --changed-since main --format json",
+    "health:fix": "fallow fix --dry-run"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
@@ -63,6 +66,7 @@
     "react-email": "^3.0.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0",
+    "fallow": "^1.0.0",
     "vitest": "^4.1.0"
   },
   "lint-staged": {

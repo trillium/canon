@@ -27,6 +27,7 @@
 - [ ] Commit-msg hook auto-trims trailing whitespace from the first line
 - [ ] Commit-msg hook auto-lowercases the first letter after the `type(scope): ` prefix
 - [ ] Pre-commit includes gitleaks secret scanning (graceful degradation if not installed)
+- [ ] Pre-push includes fallow codebase health check (conditional on `scripts/fallow-prepush.sh` existing, if codebase-health module is active)
 
 ## Apply
 

@@ -32,3 +32,8 @@ if [ -f "scripts/check-design-system.ts" ]; then
     exit 1
   fi
 fi
+
+# --- Codebase health check (if codebase-health module is active) ---
+if [ -f "scripts/fallow-prepush.sh" ]; then
+  bash scripts/fallow-prepush.sh
+fi
