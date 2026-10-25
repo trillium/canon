@@ -71,6 +71,23 @@ jobs:
             diff "modules/design-system/$f" "template/$f"
           done
 
+      - name: Check every module has an audit.md with Check, Apply and Conflicts sections
+        run: |
+          for f in modules/*/audit.md; do
+            for s in Check Apply Conflicts; do
+              grep -q "^## $s" "$f" || { echo "$f: missing '## $s' section"; exit 1; }
+            done
+          done
+
+      - name: Check agent-guardrails scripts/check-enforcement.mjs matches template
+        run: diff modules/agent-guardrails/scripts/check-enforcement.mjs template/scripts/check-enforcement.mjs
+
+      - name: Check agent-guardrails CLAUDE.template.md matches template CLAUDE.md
+        run: diff modules/agent-guardrails/CLAUDE.template.md template/CLAUDE.md
+
+      - name: Check canon's own rule -> enforcer table
+        run: node modules/agent-guardrails/scripts/check-enforcement.mjs --table-only
+
       - uses: oven-sh/setup-bun@v2
 
       - name: Verify template builds
@@ -81,5 +98,6 @@ jobs:
           pnpm run type-check
           pnpm run lint
           pnpm run build
+          pnpm run check:enforcement
           pnpm run lint:literals
           pnpm exec vitest --run

@@ -9,6 +9,7 @@
   - [ ] Job: unit tests (`vitest run`)
   - [ ] Job: build (`next build`)
   - [ ] Job: design system (`pnpm run check:ds`, needs `oven-sh/setup-bun`; applies when the design-system module is active)
+  - [ ] Job: enforcement table (`pnpm run check:enforcement`; applies when the agent-guardrails module is active)
   - [ ] All jobs run in parallel
 - [ ] `accessibility.yml` — a11y workflow on pull requests
   - [ ] Job: axe-core via Playwright (`--grep @a11y`)

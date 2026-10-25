@@ -21,6 +21,7 @@
     "content:report": "node scripts/content-report.mjs",
     "lint:literals": "node scripts/lint-literals.mjs",
     "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'",
+    "check:enforcement": "node scripts/check-enforcement.mjs",
     "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts"
   },
   "dependencies": {
@@ -78,6 +79,7 @@
       "bun scripts/check-ds-page.ts"
     ],
     "src/app/design-system/**": "bun scripts/check-ds-page.ts",
+    "{ENFORCEMENT,CLAUDE}.md": "node scripts/check-enforcement.mjs",
     "*.{md,mdx}": "cspell lint --no-must-find-files"
   }
 }

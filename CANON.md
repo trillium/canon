@@ -10,6 +10,7 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - **Feedtack for stakeholder feedback** — first-class, not an afterthought
 - **Vercel for deploy** — zero-config, preview deploys, edge functions
 - **Agent-friendly** — CLAUDE.md, clear conventions, minimal implicit knowledge
+- **Enforced, not asked** — a rule that matters is enforced by structure, a linter or CI; a sentence in `CLAUDE.md` is not enforcement
 
 ## Stack Specification
 
@@ -111,6 +112,13 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Deploy gate warns by default, hard-blocks with `CONTENT_ACCEPTANCE_GATE=hard`
 - Agents may never accept
 - Database variant (Supabase) or sidecar-file variant (static sites); see `modules/content-acceptance/SPEC.md`
+
+### Enforcement (Agent Guardrails)
+- The enforcement ladder, strongest first: (1) code structure that makes the mistake impossible; (2) static analysis — Biome, lint scripts, hooks, tests, CI; (3) rules and skills the agent is asked to follow; (4) human review. Fix a class of mistake at the highest rung that works. Rungs 3 and 4 are not enforcers
+- Every project has an agent instruction file (`CLAUDE.md`, or `AGENTS.md`) at the root. It states the commands, the layout and the enforcement rules, and points at `ENFORCEMENT.md`
+- `ENFORCEMENT.md` is the project's rule -> enforcer table: each binding rule, its kind (`structure`, `lint`, `hook`, `ci`, `test`) and the file that enforces it. A rule whose enforcer is only `convention`, `review` or `audit` is a defect — allowed solely as a dated exception (`YYYY-MM-DD reason`) that expires and then fails the check
+- `scripts/check-enforcement.mjs` keeps the table honest: named enforcer files must exist, no exception may be undated or expired, and the instruction file must reference the table. It runs on commit (lint-staged) and in CI (`enforcement` job)
+- Promotion: when an agent is corrected, the correction becomes an enforcer — a type, lint, hook, test or script — plus a row in `ENFORCEMENT.md`, never an added sentence. Procedure in `modules/agent-guardrails/PROMOTE.md`; Canon applies it to itself (`ENFORCEMENT.md` at the repo root lists the spec's own defects)
 
 ### State Management
 - Zustand for client state
