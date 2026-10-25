@@ -75,6 +75,17 @@ After all approved modules are applied:
 4. Run `pnpm test` — if tests exist, must pass
 5. Report results
 
+### Phase 7: Promote corrections (ongoing)
+
+Retrofit does not end at conformance. After the `agent-guardrails` module is applied, every correction an agent receives — in this retrofit or later — is promoted, not documented:
+
+1. Name the class of mistake the correction exposed
+2. Fix it at the highest rung of the enforcement ladder that works: code structure, then a lint, hook, test or CI check, and only then prose (see `CANON.md`, "Enforcement")
+3. Prove the enforcer rejects the mistake, then add a row to `ENFORCEMENT.md`
+4. If the enforcer would help other projects, file an issue on canon so it becomes a **Check** item in the module's `audit.md`
+
+Full procedure: `modules/agent-guardrails/PROMOTE.md`. During the audit phase, a project rule with no enforcer is not silently adopted: list it in `ENFORCEMENT.md` as a dated `convention` / `review` exception and report it in the plan as a defect.
+
 ## Module Order
 
 Apply modules in this order to avoid dependency issues:
@@ -91,10 +102,12 @@ Apply modules in this order to avoid dependency issues:
 10. `analytics` — independent, safe to add anytime
 11. `errors` — independent, safe to add anytime
 12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
+13. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
 
 ## Notes
 
 - Never remove existing functionality that isn't part of canon's scope
+- Never answer a correction by adding a rule to `CLAUDE.md` — promote it (Phase 7)
 - If the target uses ESLint/Prettier, remove them only when applying the linting module
 - Preserve existing tests — add canon's test config alongside them
 - If a module's apply step would break existing code, flag it as a conflict

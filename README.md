@@ -48,6 +48,7 @@ The agent will:
 ```
 canon/
   CANON.md               # the spec (human-readable)
+  ENFORCEMENT.md         # canon's own rule -> enforcer table
   RETROFIT.md            # agent orchestration playbook
   modules/               # modular configs + audit instructions
     linting/
@@ -62,6 +63,7 @@ canon/
     analytics/
     errors/
     content-acceptance/
+    agent-guardrails/
   template/              # skeleton Next.js app, all modules applied
 ```
 
