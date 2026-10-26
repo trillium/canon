@@ -41,16 +41,23 @@ jobs:
       - run: pnpm run check:profile
       - run: pnpm run check:file-length
       - run: pnpm run check:api-messages
+      - name: Browser job image matches the pinned @playwright/test version
+        run: |
+          pinned=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+          grep -q "image: mcr.microsoft.com/playwright:v${pinned}-noble" ../../.github/workflows/example-starter.yml \
+            || { echo "example-starter.yml: browser image must be mcr.microsoft.com/playwright:v${pinned}-noble"; exit 1; }
       - run: pnpm run build
 
   browser:
     name: Starter screenshots and accessibility
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Keep the tag equal to the pinned @playwright/test version in examples/starter/package.json;
-    # the baselines in examples/starter/e2e/__screenshots__ were made in this image.
+    # Keep the tag equal to the pinned @playwright/test version in examples/starter/package.json
+    # (the checks job enforces it); the baselines in examples/starter/e2e/__screenshots__ were made
+    # in this image.
     container:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
