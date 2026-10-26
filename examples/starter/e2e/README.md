@@ -16,6 +16,6 @@ pnpm run test:visual:update    # regenerate baselines after an intended UI chang
 
 After an intended change: run `pnpm run test:visual:update`, review the changed images in the diff, and commit them with the change.
 
-When you upgrade `@playwright/test`, change the image tag in `.github/workflows/visual.yml` to the same version (`pnpm run check:profile` fails if they differ) and regenerate the baselines.
+When you upgrade `@playwright/test`, change the image tag in `.github/workflows/visual.yml`, `e2e.yml` and `accessibility.yml` to the same version (`pnpm run check:profile` fails if they differ) and regenerate the baselines.
 
 Add a page to `PAGES` in `visual.spec.ts` when you add a route.
