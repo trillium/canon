@@ -1,0 +1,75 @@
+name: Example Starter
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "examples/starter/**"
+      - ".github/workflows/example-starter.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: examples/starter
+
+jobs:
+  checks:
+    name: Starter checks, tests and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: examples/starter/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: examples/starter/pnpm-lock.yaml
+      - uses: oven-sh/setup-bun@v2
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run type-check
+      - run: pnpm run lint
+      - run: pnpm run test -- --run
+      - run: pnpm run lint:content -- --strict
+      - run: pnpm run spellcheck
+      - run: pnpm run check:ds
+      - run: pnpm run check:enforcement
+      - run: pnpm run check:profile
+      - run: pnpm run check:file-length
+      - run: pnpm run check:api-messages
+      - run: pnpm run build
+
+  browser:
+    name: Starter screenshots and accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Keep the tag equal to the pinned @playwright/test version in examples/starter/package.json;
+    # the baselines in examples/starter/e2e/__screenshots__ were made in this image.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: examples/starter/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: examples/starter/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm exec playwright test --project=chromium
+        env:
+          PLAYWRIGHT_SERVER: start
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: starter-visual-diffs
+          path: |
+            examples/starter/test-results
+            examples/starter/playwright-report

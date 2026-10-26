@@ -1,0 +1,71 @@
+{
+  "project": "canon-starter",
+  "stage": "S0",
+  "statuses": ["conformant", "partial", "missing", "not-applicable"],
+  "modules": {
+    "agent-guardrails": {
+      "status": "conformant",
+      "reason": "CLAUDE.md points at ENFORCEMENT.md; scripts/check-enforcement.ts runs on commit and in CI."
+    },
+    "analytics": {
+      "status": "partial",
+      "reason": "PostHog provider and reverse proxy are in place; stay inert until a PostHog project key is supplied. No account is linked."
+    },
+    "auth": {
+      "status": "partial",
+      "reason": "Supabase SSR clients, proxy session refresh and the callback route are copied from the template. The proxy skips session refresh until a Supabase project is linked."
+    },
+    "ci": {
+      "status": "conformant",
+      "reason": "Template workflows (type-check, lint, unit tests, build, design system, enforcement, a11y, e2e) run on GitHub-hosted runners."
+    },
+    "content-acceptance": {
+      "status": "partial",
+      "reason": "Content JSON, lint scripts and the acceptance routes are in place. Acceptance records need a Supabase database, which is not linked."
+    },
+    "design-system": {
+      "status": "conformant",
+      "reason": "All twelve presets are enabled, the eleven primitives live in src/components/ui, and /design-system documents each one."
+    },
+    "email": {
+      "status": "partial",
+      "reason": "Resend client is copied from the template. No templates are written and no Resend account is linked."
+    },
+    "errors": {
+      "status": "missing",
+      "reason": "Sentry is not wired (no config files, no global error boundary, no withSentryConfig). Deferred until an error-tracking account exists."
+    },
+    "feedtack": {
+      "status": "partial",
+      "reason": "Provider and API route are copied; the widget is disabled by default and the route needs the Supabase feedtack_submissions table."
+    },
+    "hooks": {
+      "status": "partial",
+      "reason": "Husky pre-commit, commit-msg and pre-push are copied. The template pre-commit has no gitleaks secret scan; .env files are git-ignored in the meantime."
+    },
+    "linting": {
+      "status": "conformant",
+      "reason": "biome.json is the template's; Biome is the only linter and formatter."
+    },
+    "migration-allocator": {
+      "status": "conformant",
+      "reason": "scripts/next-migration.sh is copied and supabase/migrations holds the template's two migrations."
+    },
+    "spellcheck": {
+      "status": "conformant",
+      "reason": "cspell.json and .cspell/project-words.txt are copied; project words are added there."
+    },
+    "styling": {
+      "status": "partial",
+      "reason": "Tailwind CSS v4, PostCSS plugin, CVA, lucide-react and cn() are in place. shadcn/ui is not initialised (no components.json); the design-system primitives are hand-built with CVA."
+    },
+    "testing": {
+      "status": "conformant",
+      "reason": "Vitest and Playwright are configured, with an axe-core accessibility test over / and /design-system."
+    },
+    "theming": {
+      "status": "conformant",
+      "reason": "next-themes ThemeProvider is mounted in the root layout and globals.css defines light and dark tokens."
+    }
+  }
+}

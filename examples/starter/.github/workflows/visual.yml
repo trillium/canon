@@ -1,0 +1,38 @@
+name: Visual
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Visual Regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # The baselines in e2e/__screenshots__ were made in this exact image. Keep the tag equal to the
+    # pinned @playwright/test version (scripts/check-project-profile.ts enforces it).
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm exec playwright test --project=chromium --grep @visual
+        env:
+          PLAYWRIGHT_SERVER: start
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-diffs
+          path: |
+            test-results
+            playwright-report
