@@ -65,6 +65,7 @@ canon/
     content-acceptance/
     agent-guardrails/
   template/              # skeleton Next.js app, all modules applied
+  examples/starter/      # runnable starter app with all checks and CI, see examples/README.md
 ```
 
 ## Contributing Back
