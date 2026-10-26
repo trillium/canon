@@ -1,15 +1,14 @@
 #!/usr/bin/env bun
 /**
  * Content model linter — warns about pages and text not in the content system.
- * Runs on Bun, no dependencies. Page and content-file discovery is in lib/content-model.ts.
+ * Runs on Bun, no dependencies. Page and content-file discovery is in content/model.ts.
  *
  * Usage: bun scripts/lint-content.ts [--strict] [--root <dir>]
  *   --strict  exit 1 if any warnings are found
  */
 import { existsSync } from "node:fs";
 import { join, relative } from "node:path";
-import { scanBareText } from "./lib/bare-text";
-import { discoverPages, keyFor, loadContentModel } from "./lib/content-model";
+import { discoverPages, keyFor, loadContentModel, scanBareText } from "./content";
 
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");

@@ -11,7 +11,7 @@
  * Needs `git` and `bun` on PATH (CI installs bun via oven-sh/setup-bun).
  */
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -20,7 +20,6 @@ const PROJECT = process.cwd();
 const LINT_STAGED = join(PROJECT, "node_modules/lint-staged/bin/lint-staged.js");
 const COPIED_FILES = [
   "scripts/check-design-system.ts",
-  "scripts/lib/ds-check.ts",
   "src/components/ui/manifest.ts",
   "src/components/ui/manifest.config.ts",
 ];
@@ -75,7 +74,11 @@ const RAW_DIV = "export const A = () => <div>hello</div>;\n";
 beforeAll(() => {
   repo = mkdtempSync(join(tmpdir(), "ds-enforcement-"));
   remote = mkdtempSync(join(tmpdir(), "ds-enforcement-remote-"));
-  for (const file of COPIED_FILES) {
+  // The checker is a folder of modules next to its entry script.
+  const checkerModules = readdirSync(resolve(PROJECT, "scripts/design-system")).map(
+    (name) => `scripts/design-system/${name}`,
+  );
+  for (const file of [...COPIED_FILES, ...checkerModules]) {
     mkdirSync(dirname(join(repo, file)), { recursive: true });
     copyFileSync(resolve(PROJECT, file), join(repo, file));
   }
@@ -160,7 +163,6 @@ describe("design-system enforcement blocks", () => {
     write("src/app/line-opted-out.tsx", `// ds-ignore\n${RAW_DIV}`);
     const optedOut = run("bun", [
       "scripts/check-design-system.ts",
-      "scripts/lib/ds-check.ts",
       "src/app/opted-out.tsx",
       "src/app/line-opted-out.tsx",
     ]);

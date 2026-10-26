@@ -2,7 +2,7 @@
 /**
  * No-literal-text linter — component files may contain NO literal user-visible text.
  * Every string is a variable imported from a JSON content file. Runs on Bun; the scan itself is in
- * lib/literals-scan.ts.
+ * literals/.
  *
  * Usage: bun scripts/lint-literals.ts [--root <dir>] [--no-list] [files...]
  *   files     check only these files (lint-staged passes staged files); default: scan the source dir
@@ -25,8 +25,8 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { walk } from "./lib/fs";
-import { type Escape, IGNORED_DIR, IGNORED_FILE, scan, type Violation } from "./lib/literals-scan";
+import { type Escape, IGNORED_DIR, IGNORED_FILE, scan, type Violation } from "./literals";
+import { walk } from "./shared/fs";
 
 const argv = process.argv.slice(2);
 const rootIdx = argv.indexOf("--root");

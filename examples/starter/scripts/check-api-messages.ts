@@ -13,7 +13,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 import ts from "typescript";
-import { walk } from "./lib/fs";
+import { walk } from "./shared/fs";
 
 const MESSAGE_KEYS = new Set(["error", "message"]);
 const RESPONSE_CALL = /^(NextResponse|Response)\.json$/;

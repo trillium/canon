@@ -9,8 +9,8 @@
  *      outside components/ui.
  *   4. .env.example holds placeholders only (empty values or URLs), never a secret.
  *   5. scripts/ holds only .ts and .sh files (see scripts/README.md).
- *   6. The visual workflow runs in the Playwright image that matches the pinned @playwright/test
- *      version, so screenshot baselines stay stable.
+ *   6. The visual, e2e and accessibility workflows run in the Playwright image that matches the
+ *      pinned @playwright/test version, so baselines stay stable and no browser install is needed.
  *   7. Every page route has a visual test in e2e/visual.spec.ts.
  *
  * Usage: bun scripts/check-project-profile.ts [--root <dir>]
@@ -18,8 +18,8 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { extname, join, relative, resolve } from "node:path";
-import { discoverPages } from "./lib/content-model";
-import { walk } from "./lib/fs";
+import { discoverPages } from "./content";
+import { walk } from "./shared/fs";
 
 const argv = process.argv.slice(2);
 const rootIdx = argv.indexOf("--root");
@@ -145,17 +145,21 @@ if (existsSync(scriptsDir)) {
   }
 }
 
-// 6. Visual baselines: pinned Playwright version and matching image
+// 6. Playwright jobs run in the image that matches the pinned version (stable baselines, no install)
+const PLAYWRIGHT_WORKFLOWS = ["visual", "e2e", "accessibility"];
 if (pkgText) {
   const pinned = JSON.parse(pkgText).devDependencies?.["@playwright/test"] ?? "";
   if (!/^\d+\.\d+\.\d+$/.test(pinned))
     errors.push(`package.json: @playwright/test must be an exact version (found "${pinned}")`);
-  const visual = read(".github/workflows/visual.yml");
-  const image = visual?.match(/image:\s*mcr\.microsoft\.com\/playwright:v([\w.]+)-/)?.[1];
-  if (visual && image !== pinned)
-    errors.push(
-      `.github/workflows/visual.yml: Playwright image v${image ?? "?"} must match @playwright/test ${pinned}`,
-    );
+  for (const name of PLAYWRIGHT_WORKFLOWS) {
+    const workflow = `.github/workflows/${name}.yml`;
+    const text = read(workflow);
+    const image = text?.match(/image:\s*mcr\.microsoft\.com\/playwright:v([\w.]+)-/)?.[1];
+    if (text && image !== pinned)
+      errors.push(
+        `${workflow}: Playwright image v${image ?? "?"} must match @playwright/test ${pinned}`,
+      );
+  }
 }
 
 // 7. Every page route has a visual test

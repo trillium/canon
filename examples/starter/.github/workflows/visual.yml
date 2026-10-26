@@ -12,11 +12,12 @@ jobs:
   visual:
     name: Visual Regression
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     # The baselines in e2e/__screenshots__ were made in this exact image. Keep the tag equal to the
     # pinned @playwright/test version (scripts/check-project-profile.ts enforces it).
     container:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

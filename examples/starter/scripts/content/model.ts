@@ -12,7 +12,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { walk } from "./fs";
+import { walk } from "../shared/fs";
 
 export interface ContentModel {
   root: string;

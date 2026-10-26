@@ -1,71 +1,12 @@
 /**
- * The literal-text scan behind lint-literals.ts: parses one .tsx/.jsx file and reports letter-bearing
- * strings rendered as JSX text, JSX children or user-visible attributes.
+ * Parses one .tsx/.jsx file and reports letter-bearing strings rendered as JSX text, JSX children or
+ * user-visible attributes. Escape hatches: `content-ok: reason` comments and `data-content-skip`.
  */
 import { readFileSync } from "node:fs";
 import ts from "typescript";
-
-export interface Violation {
-  file: string;
-  line: number;
-  what: string;
-  shown: string;
-}
-
-export interface Escape {
-  file: string;
-  line: number;
-  kind: string;
-  reason: string;
-}
-
-export interface ScanResult {
-  violations: Violation[];
-  escapes: Escape[];
-}
-
-/** Props whose string value a visitor reads or hears. */
-const COPY_ATTRS = new Set([
-  "placeholder",
-  "title",
-  "alt",
-  "label",
-  "aria-label",
-  "aria-description",
-  "aria-placeholder",
-  "aria-roledescription",
-]);
-const SKIP_ATTR = "data-content-skip";
-export const IGNORED_FILE = /\.(test|spec|stories)\.[jt]sx?$|[\\/]__tests__[\\/]/;
-export const IGNORED_DIR = new Set(["node_modules", ".next", "dist", "build", "coverage", ".git"]);
-
-const hasLetter = (s: string): boolean =>
-  /\p{L}/u.test(s.replace(/&(?:#\d+|#x[\da-f]+|\w+);/gi, ""));
-
-/** Letter-bearing string literals reachable through ternaries, &&, ||, ??, parens and casts. */
-function literalsIn(node: ts.Node, out: ts.Node[] = []): ts.Node[] {
-  if (ts.isStringLiteralLike(node)) {
-    if (hasLetter(node.text)) out.push(node);
-  } else if (ts.isTemplateExpression(node)) {
-    const parts = [node.head.text, ...node.templateSpans.map((s) => s.literal.text)];
-    if (parts.some(hasLetter)) out.push(node);
-  } else if (ts.isConditionalExpression(node)) {
-    literalsIn(node.whenTrue, out);
-    literalsIn(node.whenFalse, out);
-  } else if (ts.isBinaryExpression(node)) {
-    literalsIn(node.right, out);
-    if (!(node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken))
-      literalsIn(node.left, out);
-  } else if (
-    ts.isParenthesizedExpression(node) ||
-    ts.isAsExpression(node) ||
-    ts.isSatisfiesExpression(node) ||
-    ts.isNonNullExpression(node)
-  ) {
-    literalsIn(node.expression, out);
-  }
-  return out;
-}
+import { COPY_ATTRS, SKIP_ATTR } from "./constants";
+import { hasLetter, literalsIn } from "./expressions";
+import type { Escape, ScanResult, Violation } from "./types";
 
 export function scan(file: string): ScanResult {
   const text = readFileSync(file, "utf-8");

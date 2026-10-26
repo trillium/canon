@@ -17,6 +17,8 @@ const FILES = [
   "postcss.config.mjs",
   ".env.example",
   ".github/workflows/visual.yml",
+  ".github/workflows/e2e.yml",
+  ".github/workflows/accessibility.yml",
   "src/app/globals.css",
   "src/components/ui/manifest.ts",
   "src/components/ui/manifest.config.ts",
@@ -73,12 +75,17 @@ describe("check-project-profile", () => {
     expect(run().out).toContain("scripts/legacy.mjs: scripts must be .ts");
   });
 
-  it("fails when the visual workflow image does not match the Playwright version", () => {
-    edit(".github/workflows/visual.yml", (t) =>
-      t.replace(/playwright:v[\d.]+-/, "playwright:v1.0.0-"),
-    );
-    expect(run().out).toContain("Playwright image v1.0.0 must match @playwright/test");
-  });
+  it.each(["visual", "e2e", "accessibility"])(
+    "fails when the %s workflow image does not match the Playwright version",
+    (name) => {
+      edit(`.github/workflows/${name}.yml`, (t) =>
+        t.replace(/playwright:v[\d.]+-/, "playwright:v1.0.0-"),
+      );
+      expect(run().out).toContain(
+        `${name}.yml: Playwright image v1.0.0 must match @playwright/test`,
+      );
+    },
+  );
 
   it("fails when @playwright/test is not an exact version", () => {
     edit("package.json", (t) =>

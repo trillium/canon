@@ -34,5 +34,5 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | The API message guard rejects inline response text and accepts content-file messages | test | `src/test/check-api-messages.test.ts` | - |
 | Scripts are TypeScript run with Bun (`.sh` only for shell wrappers); no `.mjs` or `.js` | ci | `scripts/check-project-profile.ts`, `scripts/README.md` | - |
 | Every page has a committed visual baseline; a visual diff fails the pull request | ci | `e2e/visual.spec.ts`, `.github/workflows/visual.yml` | - |
-| Visual baselines are made in the Playwright image pinned to the exact `@playwright/test` version | ci | `scripts/check-project-profile.ts`, `.github/workflows/visual.yml` | - |
+| The visual, e2e and accessibility jobs run in the Playwright image pinned to the exact `@playwright/test` version | ci | `scripts/check-project-profile.ts`, `.github/workflows/visual.yml`, `.github/workflows/e2e.yml`, `.github/workflows/accessibility.yml` | - |
 | Every rule above has an enforcer that exists; no exception has expired | ci | `scripts/check-enforcement.ts`, `.github/workflows/ci.yml` | - |

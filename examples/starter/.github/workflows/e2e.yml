@@ -12,7 +12,13 @@ jobs:
   e2e:
     name: End-to-End Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    # Runs in the pinned Playwright image, which ships the browsers and system dependencies, so no
+    # install step is needed. The tag must equal the pinned @playwright/test version
+    # (scripts/check-project-profile.ts enforces it).
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -21,5 +27,4 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run test:e2e --project=chromium --grep-invert "@a11y|@visual"

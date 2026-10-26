@@ -1,37 +1,6 @@
-/**
- * The matching engine behind check-design-system.ts: given a source file and the manifest rules,
- * returns the raw-HTML findings, honouring the ds-ignore directives. Directives count only at the
- * start of a line, so a string that quotes one exempts nothing.
- */
-
-interface DsRulePattern {
-  jsx?: RegExp;
-  className?: RegExp;
-  jsxStyle?: { element: RegExp; styling: RegExp };
-}
-
-export interface DsRule {
-  name: string;
-  component: string;
-  importPath: string;
-  hint?: string;
-  noEscapeHatch?: boolean;
-  patterns: DsRulePattern[];
-}
-
-export interface Finding {
-  file: string;
-  line: number;
-  rule: string;
-  action: string;
-  noEscapeHatch: boolean;
-  excerpt: string;
-}
-
-const FILE_OPT_OUT = "/* ds-ignore-file */";
-const LINE_OPT_OUT = "// ds-ignore";
-const LINE_OPT_OUT_JSX = "{/* ds-ignore */}";
-const IGNORE_WINDOW = 3;
+/** The matching engine: finds raw-HTML violations in a source file for a set of manifest rules. */
+import { hasFileOptOut, hasLineOptOut, IGNORE_WINDOW, isCommentLine } from "./directives";
+import type { DsRule, Finding } from "./types";
 
 function lineMatches(line: string, rule: DsRule): boolean {
   for (const p of rule.patterns) {
@@ -40,19 +9,6 @@ function lineMatches(line: string, rule: DsRule): boolean {
     if (p.jsxStyle?.element.test(line) && p.jsxStyle.styling.test(line)) return true;
   }
   return false;
-}
-
-function isCommentLine(line: string): boolean {
-  const t = line.trim();
-  return t.startsWith("//") || t.startsWith("*") || t.startsWith("/*");
-}
-
-function hasDirective(line: string, directive: string): boolean {
-  return line.trim().startsWith(directive);
-}
-
-export function hasFileOptOut(source: string): boolean {
-  return source.split("\n").some((l) => hasDirective(l, FILE_OPT_OUT));
 }
 
 interface CheckOptions {
@@ -74,9 +30,7 @@ export function checkSource(
     const line = lines[i];
     if (isCommentLine(line) || options.baseline?.has(line.trim())) continue;
     const window = lines.slice(Math.max(0, i - IGNORE_WINDOW), i + IGNORE_WINDOW + 1);
-    const lineIgnored = window.some(
-      (l) => hasDirective(l, LINE_OPT_OUT) || hasDirective(l, LINE_OPT_OUT_JSX),
-    );
+    const lineIgnored = window.some(hasLineOptOut);
     for (const rule of rules) {
       if ((fileIgnored || lineIgnored) && !rule.noEscapeHatch) continue;
       if (!lineMatches(line, rule)) continue;

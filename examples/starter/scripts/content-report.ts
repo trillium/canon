@@ -8,8 +8,8 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { discoverPages, keyFor, loadContentModel, PAGE_FILE } from "./lib/content-model";
-import { walk } from "./lib/fs";
+import { discoverPages, keyFor, loadContentModel, PAGE_FILE } from "./content";
+import { walk } from "./shared/fs";
 
 const args = process.argv.slice(2);
 const jsonOutput = args.includes("--json");
