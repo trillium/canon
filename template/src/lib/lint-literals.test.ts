@@ -17,7 +17,6 @@ function component(name: string, source: string) {
 function lint(...files: string[]) {
   return spawnSync("node", [script, "--root", root, ...files], {
     encoding: "utf-8",
-    // typescript resolves from the cwd (template/node_modules), not from the tmp root
     cwd: process.cwd(),
   });
 }

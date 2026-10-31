@@ -22,7 +22,8 @@
     "lint:literals": "node scripts/lint-literals.mjs",
     "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'",
     "check:enforcement": "node scripts/check-enforcement.mjs",
-    "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts"
+    "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts",
+    "check:comments": "bun scripts/check-comments.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
@@ -80,6 +81,7 @@
     ],
     "src/app/design-system/**": "bun scripts/check-ds-page.ts",
     "{ENFORCEMENT,CLAUDE}.md": "node scripts/check-enforcement.mjs",
-    "*.{md,mdx}": "cspell lint --no-must-find-files"
+    "*.{md,mdx}": "cspell lint --no-must-find-files",
+    "*.{ts,tsx,js,jsx,mjs,cjs,sql}": "bun scripts/check-comments.ts"
   }
 }

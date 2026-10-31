@@ -1,9 +1,4 @@
 // @vitest-environment node
-/**
- * Proves the rule -> enforcer check keeps ENFORCEMENT.md honest: it fails on a rule enforced by
- * convention alone, an expired exception, an enforcer file that does not exist, and a project
- * with no agent instruction file — and passes on a dated exception that has not expired.
- */
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

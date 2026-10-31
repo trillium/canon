@@ -21,6 +21,8 @@ Built on [canon](https://github.com/trillium/canon). Next.js 16 (App Router) + R
 
 Every binding rule in this project is enforced by a mechanism, named in `ENFORCEMENT.md`. The hooks and CI jobs there are the rules — do not work around them (`--no-verify`, `// ds-ignore` without a reason). A rule whose only enforcer is `convention`, `review` or `audit` is a defect: fix it by building the enforcer.
 
+Do not write comments. Encode intent in names, types and tests; `pnpm run check:comments` fails on any comment that is not a tool directive, a license header, or an RFC or URL citation.
+
 ## When corrected
 
 When you are corrected, do not add a sentence to this file. Fix the class of mistake at the highest rung that works — code structure, then lint / hook / test / CI, and only then prose — and add a row to `ENFORCEMENT.md`. Procedure: canon `modules/agent-guardrails/PROMOTE.md`.

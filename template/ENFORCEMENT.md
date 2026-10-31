@@ -22,4 +22,5 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | pnpm is the only package manager; no foreign lock files | hook | `.husky/pre-commit` | - |
 | Next.js 16: `proxy.ts`, never `middleware.ts` | hook | `.husky/pre-commit` | - |
 | Prose and identifiers are spell-checked | lint | `cspell.json` | - |
+| Code comments are banned except directives, license headers and external-fact citations; the allow-list only shrinks | lint | `scripts/check-comments.ts`, `.github/workflows/no-comments.yml` | - |
 | Every rule above has an enforcer that exists; no exception has expired | ci | `scripts/check-enforcement.mjs`, `.github/workflows/ci.yml` | - |

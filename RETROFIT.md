@@ -102,7 +102,8 @@ Apply modules in this order to avoid dependency issues:
 10. `analytics` — independent, safe to add anytime
 11. `errors` — independent, safe to add anytime
 12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
-13. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
+13. `no-comments` — opt-in; apply only when the project wants comments banned. Baseline existing comments, then sweep them
+14. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
 
 ## Notes
 

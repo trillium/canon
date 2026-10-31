@@ -85,6 +85,13 @@ jobs:
       - name: Check agent-guardrails CLAUDE.template.md matches template CLAUDE.md
         run: diff modules/agent-guardrails/CLAUDE.template.md template/CLAUDE.md
 
+      - name: Check no-comments module matches template
+        run: |
+          for f in scripts/check-comments.ts src/test/check-comments.test.ts \
+            .github/workflows/no-comments.yml .no-comments-baseline.json; do
+            diff "modules/no-comments/$f" "template/$f"
+          done
+
       - name: Check canon's own rule -> enforcer table
         run: node modules/agent-guardrails/scripts/check-enforcement.mjs --table-only
 
@@ -99,5 +106,6 @@ jobs:
           pnpm run lint
           pnpm run build
           pnpm run check:enforcement
+          pnpm run check:comments
           pnpm run lint:literals
           pnpm exec vitest --run
