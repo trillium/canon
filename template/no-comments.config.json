@@ -1,0 +1,17 @@
+{
+  "dirs": ["src", "e2e", "supabase"],
+  "exclude": [
+    "src/types/database.ts",
+    "src/lib/content-acceptance.ts",
+    "src/lib/require-admin.ts",
+    "src/app/api/content/accept/route.ts",
+    "src/app/api/content/status/route.ts",
+    "src/app/api/deploy/route.ts",
+    "src/components/ui/manifest.ts",
+    "src/components/ui/manifest.config.ts",
+    "src/app/design-system/page.tsx",
+    "src/test/design-system-enforcement.test.ts",
+    "supabase/migrations/00002_content_acceptance.sql"
+  ],
+  "baseline": ".no-comments-baseline.json"
+}

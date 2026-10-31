@@ -64,6 +64,7 @@ canon/
     errors/
     content-acceptance/
     agent-guardrails/
+    no-comments/         # opt-in: bans code comments, shrinking allow-list
   template/              # skeleton Next.js app, all modules applied
 ```
 

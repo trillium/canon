@@ -1,0 +1,10 @@
+$ pnpm run check:comments   # clean scaffold, empty allow-list
+exit=0
+$ pnpm run check:comments   # after adding src/lib/demo.ts with a comment
+src/lib/demo.ts:1: // why this exists
+src/lib/demo.ts:2: // trailing
+
+src/lib/demo.ts: 2 comment(s) in a file not on the allow-list
+
+Delete the comment and put the intent in a name, a type or a test. Allowed: tool directives, license headers, RFC numbers, http(s) URLs.
+exit=1

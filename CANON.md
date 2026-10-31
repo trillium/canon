@@ -120,6 +120,13 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - `scripts/check-enforcement.mjs` keeps the table honest: named enforcer files must exist, no exception may be undated or expired, and the instruction file must reference the table. It runs on commit (lint-staged) and in CI (`enforcement` job)
 - Promotion: when an agent is corrected, the correction becomes an enforcer — a type, lint, hook, test or script — plus a row in `ENFORCEMENT.md`, never an added sentence. Procedure in `modules/agent-guardrails/PROMOTE.md`; Canon applies it to itself (`ENFORCEMENT.md` at the repo root lists the spec's own defects)
 
+### No Comments (opt-in)
+- Code comments are banned: agents copy them, they go stale, and nothing enforces them. Intent goes in names, types, tests, lint rules and API design
+- `scripts/check-comments.ts` (`pnpm run check:comments`, pre-commit and CI) scans with the TypeScript scanner, so `//` inside a string is not a hit, and fails on any comment except tool directives, license headers, and comments citing an RFC number or an http(s) URL
+- SQL: `comment on` statements are fine; a header comment before the first statement may name a ticket or spec
+- Existing comments sit on `.no-comments-baseline.json` (path + count per file). Counts only shrink: a new file or a higher count fails, and `--baseline` refuses to grow the list. A fresh scaffold starts with it empty
+- Module: `modules/no-comments/`
+
 ### State Management
 - Zustand for client state
 - No Redux. No Context for complex state.

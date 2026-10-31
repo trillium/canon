@@ -1,0 +1,5 @@
+{
+  "dirs": ["src", "e2e", "supabase"],
+  "exclude": ["src/types/database.ts"],
+  "baseline": ".no-comments-baseline.json"
+}
