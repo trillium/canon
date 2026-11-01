@@ -66,6 +66,7 @@ canon/
     agent-guardrails/
     no-comments/         # opt-in: bans code comments, shrinking allow-list
   template/              # skeleton Next.js app, all modules applied
+  examples/starter/      # runnable starter app with all checks and CI, see examples/README.md
 ```
 
 ## Contributing Back
