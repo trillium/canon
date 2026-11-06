@@ -22,12 +22,13 @@ const layout = readFileSync(layoutPath, "utf-8");
 const css = cssPath ? readFileSync(cssPath, "utf-8") : "";
 const problems = [];
 
-const body = layout.match(/<body\b([^>]*)>/)?.[1] ?? "";
+const bodyMatch = layout.match(/<body\b([^>]*)>/);
+const body = bodyMatch?.[1] ?? "";
 const bodyRule = [...css.matchAll(/(?<![\w-])body\s*\{([^}]*)\}/g)].map((m) => m[1]).join(";");
 const tokens = (s) => new Set(s.split(/[\s"'`{}(),]+/));
 const bodyClasses = tokens(body);
 
-if (!body) problems.push("root layout has no <body> element");
+if (bodyMatch === null) problems.push("root layout has no <body> element");
 
 if (!bodyClasses.has("min-h-dvh") && !/min-height:\s*100dvh/.test(bodyRule)) {
   problems.push("<body> needs min-h-dvh (or min-height: 100dvh); 100vh alone overflows on phones");
