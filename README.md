@@ -66,6 +66,7 @@ canon/
     agent-guardrails/
     no-comments/         # opt-in: bans code comments, shrinking allow-list
     css-normalize/       # opt-in: CSS reset, self-hosted fonts, no system-font stacks
+    data-seam/           # only one folder imports the database client, shrinking allow-list
   template/              # skeleton Next.js app, all modules applied
 ```
 

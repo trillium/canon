@@ -104,7 +104,8 @@ Apply modules in this order to avoid dependency issues:
 12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
 13. `no-comments` — opt-in; apply only when the project wants comments banned. Baseline existing comments, then sweep them
 14. `css-normalize` — opt-in; apply when the project has visual tests or wants consistent fonts across Mac, Linux and CI. Replace system-font stacks with a self-hosted font
-15. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
+15. `data-seam` — apply when application code builds database clients directly. Baseline the existing importers, then migrate them into the seam folder one feature per PR
+16. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
 
 ## Notes
 

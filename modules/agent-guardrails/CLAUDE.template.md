@@ -23,6 +23,8 @@ Every binding rule in this project is enforced by a mechanism, named in `ENFORCE
 
 Do not write comments. Encode intent in names, types and tests; `pnpm run check:comments` fails on any comment that is not a tool directive, a license header, or an RFC or URL citation.
 
+Do not import `@supabase/supabase-js` or `@supabase/ssr` outside `src/lib/supabase`; add a typed function there and call it. `pnpm run check:seam` fails on any other import.
+
 ## When corrected
 
 When you are corrected, do not add a sentence to this file. Fix the class of mistake at the highest rung that works — code structure, then lint / hook / test / CI, and only then prose — and add a row to `ENFORCEMENT.md`. Procedure: canon `modules/agent-guardrails/PROMOTE.md`.

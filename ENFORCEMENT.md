@@ -28,6 +28,7 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | The page is at least as tall as the screen: `<body>` is a `min-h-dvh` flex column with no fixed height; a literal `<footer>` in the root layout follows a `flex-1` element and is not fixed or sticky | lint | `modules/styling/scripts/check-page-frame.mjs`, `.github/workflows/conformance.yml` | - |
 | Code comments are banned; intent lives in names, types and tests | lint | `modules/no-comments/scripts/check-comments.ts`, `modules/no-comments/.github/workflows/no-comments.yml` | - |
 | CSS is normalized across browsers; fonts are self-hosted; no system-font stacks (reduces but does not remove OS rasterisation differences) | lint | `modules/css-normalize/scripts/check-css-normalize.mjs`, `modules/css-normalize/.github/workflows/css-normalize.yml` | - |
+| Only the seam folder imports the database client packages; the legacy allow-list only shrinks | lint | `modules/data-seam/scripts/check-data-seam.ts`, `modules/data-seam/.github/workflows/data-seam.yml` | - |
 | The template has an agent instruction file that points at its enforcement table | ci | `modules/agent-guardrails/scripts/check-enforcement.mjs`, `template/ENFORCEMENT.md` | - |
 
 ## What Canon enforces on itself

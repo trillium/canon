@@ -25,4 +25,5 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | Prose and identifiers are spell-checked | lint | `cspell.json` | - |
 | Code comments are banned except directives, license headers and external-fact citations; the allow-list only shrinks | lint | `scripts/check-comments.ts`, `.github/workflows/no-comments.yml` | - |
 | CSS is normalized across browsers: a normalize stylesheet, self-hosted fonts with explicit metrics, no system-font stacks; consistent fonts and rendering settings across browsers, which reduces but does not remove OS rasterisation differences | lint | `scripts/check-css-normalize.mjs`, `.github/workflows/css-normalize.yml` | - |
+| Only `src/lib/supabase` imports the database client packages; the legacy allow-list only shrinks | lint | `scripts/check-data-seam.ts`, `.github/workflows/data-seam.yml` | - |
 | Every rule above has an enforcer that exists; no exception has expired | ci | `scripts/check-enforcement.mjs`, `.github/workflows/ci.yml` | - |
