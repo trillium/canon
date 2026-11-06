@@ -51,7 +51,11 @@ export function isClientSpecifier(specifier: string, packages: string[]): boolea
   return packages.some((pkg) => specifier === pkg || specifier.startsWith(`${pkg}/`));
 }
 
-export function scanImports(source: string, packages: string[], fileName = "file.ts"): ImportHit[] {
+export function scanImports(
+  source: string,
+  packages: string[],
+  _fileName = "file.ts",
+): ImportHit[] {
   const info = ts.preProcessFile(source, true, true);
   const hits: ImportHit[] = [];
   for (const ref of info.importedFiles) {
