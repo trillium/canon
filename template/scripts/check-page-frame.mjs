@@ -23,38 +23,41 @@ const css = cssPath ? readFileSync(cssPath, "utf-8") : "";
 const problems = [];
 
 const body = layout.match(/<body\b([^>]*)>/)?.[1] ?? "";
-const bodyRule = css.match(/\bbody\s*\{([^}]*)\}/)?.[1] ?? "";
-const bodyStyle = `${body} ${bodyRule}`;
+const bodyRule = [...css.matchAll(/(?<![\w-])body\s*\{([^}]*)\}/g)].map((m) => m[1]).join(";");
+const tokens = (s) => new Set(s.split(/[\s"'`{}(),]+/));
+const bodyClasses = tokens(body);
 
 if (!body) problems.push("root layout has no <body> element");
 
-if (!/\bmin-h-dvh\b|min-height:\s*100dvh/.test(bodyStyle)) {
+if (!bodyClasses.has("min-h-dvh") && !/min-height:\s*100dvh/.test(bodyRule)) {
   problems.push("<body> needs min-h-dvh (or min-height: 100dvh); 100vh alone overflows on phones");
 }
-if (
-  !/\bflex\b[^"]*\bflex-col\b|\bflex-col\b[^"]*\bflex\b|display:\s*flex[^}]*flex-direction:\s*column/.test(
-    bodyStyle,
-  )
-) {
+const cssFlexCol =
+  /display:\s*flex(?![\w-])/.test(bodyRule) && /flex-direction:\s*column/.test(bodyRule);
+if (!(bodyClasses.has("flex") && bodyClasses.has("flex-col")) && !cssFlexCol) {
   problems.push("<body> needs flex and flex-col so the content area can take the spare space");
 }
-if (/(?<![\w-])(h-screen|h-dvh|h-svh|h-lvh)(?![\w-])|(?<![-\w])height:\s*100d?vh/.test(bodyStyle)) {
+if (
+  ["h-screen", "h-dvh", "h-svh", "h-lvh"].some((c) => bodyClasses.has(c)) ||
+  /(?<![-\w])height:\s*100d?vh/.test(bodyRule)
+) {
   problems.push(
     "<body> must use min-height, never height; a fixed height makes the page scroll inside itself",
   );
 }
-if (/(?<![\w-])min-h-screen(?![\w-])/.test(body) && !/\bmin-h-dvh\b/.test(body)) {
+if (bodyClasses.has("min-h-screen") && !bodyClasses.has("min-h-dvh")) {
   problems.push("<body> uses min-h-screen (100vh); use min-h-dvh");
 }
 
 const footerAt = layout.search(/<footer\b/);
 if (footerAt >= 0) {
   const beforeFooter = layout.slice(0, footerAt);
-  if (!/\bflex-1\b/.test(beforeFooter.slice(beforeFooter.search(/<body\b/)))) {
+  if (!tokens(beforeFooter.slice(beforeFooter.search(/<body\b/))).has("flex-1")) {
     problems.push("layout holds a <footer> but no flex-1 element comes before it in <body>");
   }
   const footerTag = layout.slice(footerAt).match(/<footer\b[^>]*>/)?.[0] ?? "";
-  if (/(?<![\w-])(fixed|sticky)(?![\w-])/.test(footerTag)) {
+  const footerClasses = tokens(footerTag);
+  if (footerClasses.has("fixed") || footerClasses.has("sticky")) {
     problems.push("<footer> must be a normal flex child, not fixed or sticky");
   }
 }

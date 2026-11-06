@@ -13,7 +13,7 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | No literal user-visible text in components | lint | `scripts/lint-literals.mjs`, `biome.json` | - |
 | Copy records are well-formed and tagged `data-content` | lint | `scripts/lint-content.mjs` | - |
 | Agents never accept content; accepting needs a human admin session | structure | `src/lib/require-admin.ts` | - |
-| Page frame: `min-h-dvh` flex column on `<body>`, content area `flex-1`, footer not fixed | lint | `scripts/check-page-frame.mjs`, `.github/workflows/ci.yml` | - |
+| Page frame: `min-h-dvh` flex column on `<body>` with no fixed height; a literal `<footer>` in the root layout follows a `flex-1` element and is not fixed or sticky | lint | `scripts/check-page-frame.mjs`, `.github/workflows/ci.yml` | - |
 | No raw HTML elements outside `components/ui` | hook | `scripts/check-design-system.ts`, `.claude/settings.json` | - |
 | The design-system gate rejects a raw `<div>` commit | test | `src/test/design-system-enforcement.test.ts` | - |
 | Every `components/ui` primitive has a manifest entry | lint | `scripts/check-ds-coverage.ts` | - |

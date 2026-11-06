@@ -47,7 +47,7 @@ Common mistakes:
 - Nested scroll containers (`overflow: auto` or a fixed height on the frame or content): the page scrolls inside itself and the footer is no longer the bottom of the page. Use `min-height`, never `height`.
 - A fixed notice at the bottom (cookie bar) that is not allowed for: reserve its height with a spacer in the flow so the footer is not buried.
 
-`scripts/check-page-frame.mjs` reads the root layout and global CSS and fails on the first four mistakes; the cookie-bar spacer is a manual check.
+`scripts/check-page-frame.mjs` reads the root layout and global CSS. It fails when `<body>` lacks `min-h-dvh`, `flex` or `flex-col` (or the CSS equivalents), uses `min-h-screen`, or sets a fixed height; and when a literal `<footer>` in the root layout is `fixed`/`sticky` or has no `flex-1` element before it. Manual checks: the `flex-1` frame and content area when the footer is a component or lives outside the root layout, a fixed or sticky footer component, nested scroll containers below `<body>`, and the cookie-bar spacer.
 
 ## Apply
 
@@ -80,4 +80,5 @@ Common mistakes:
 - If project uses Tailwind v3, migration to v4 may require config changes — flag for review
 - If project uses Headless UI, it can coexist with shadcn but components should migrate incrementally
 - If the root layout already sets `h-screen`, `h-dvh` or `overflow` on `<body>` or a wrapper, replace it with `min-h-dvh`; flag nested scroll containers for review
+- If the design-system module enables `raw-div` or `raw-stack`, build the frame and content area with `<Stack className="flex-1">` instead of raw `<div>`s
 - If project uses a different icon library, lucide can coexist — no need to remove
