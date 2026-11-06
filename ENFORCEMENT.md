@@ -25,6 +25,7 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | Acceptance records are keyed to a content hash; edits invalidate | structure | `modules/content-acceptance/lib/content-acceptance.ts` | - |
 | Prose is spell-checked | lint | `modules/spellcheck/cspell.json` | - |
 | Migration numbers are allocated, not hand-picked | structure | `modules/migration-allocator/next-migration.sh` | - |
+| The page is at least as tall as the screen and the footer sits at the bottom edge (`min-h-dvh` flex frame, no fixed footer) | lint | `modules/styling/scripts/check-page-frame.mjs`, `.github/workflows/conformance.yml` | - |
 | Code comments are banned; intent lives in names, types and tests | lint | `modules/no-comments/scripts/check-comments.ts`, `modules/no-comments/.github/workflows/no-comments.yml` | - |
 | CSS is normalized across browsers; fonts are self-hosted; no system-font stacks (reduces but does not remove OS rasterisation differences) | lint | `modules/css-normalize/scripts/check-css-normalize.mjs`, `modules/css-normalize/.github/workflows/css-normalize.yml` | - |
 | The template has an agent instruction file that points at its enforcement table | ci | `modules/agent-guardrails/scripts/check-enforcement.mjs`, `template/ENFORCEMENT.md` | - |

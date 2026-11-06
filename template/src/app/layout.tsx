@@ -14,10 +14,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="flex min-h-dvh flex-col">
         <ThemeProvider>
           <PostHogProvider>
-            <FeedtackProvider>{children}</FeedtackProvider>
+            <FeedtackProvider>
+              <div className="flex flex-1 flex-col">
+                <div className="flex flex-1 flex-col">{children}</div>
+              </div>
+            </FeedtackProvider>
           </PostHogProvider>
         </ThemeProvider>
       </body>

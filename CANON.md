@@ -55,6 +55,7 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - CVA for variant management
 - lucide-react for icons
 - clsx + tailwind-merge for class composition
+- Page frame: the page is at least as tall as the device screen (`min-h-dvh` flex column on `<body>`), the content area is `flex-1`, and the footer is the last, non-fixed flex child so it sits at the bottom edge. `scripts/check-page-frame.mjs` checks the root layout
 
 ### Design System
 - Raw HTML elements (`<button>`, `<input>`, `<p>`, `<h1>`–`<h6>`, `<a>`, `<div>`, …) are banned outside `components/ui/`; each has a design-system component that replaces it
