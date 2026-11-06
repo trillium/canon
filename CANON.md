@@ -139,9 +139,10 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 ### Data Seam
 - Application code never touches the database client: one folder (`src/lib/supabase` in the template) imports `@supabase/supabase-js` and `@supabase/ssr` and exposes typed functions; everything else calls those. Agents copy the nearest example, so no example may build a client inline
 - `scripts/check-data-seam.ts` (`pnpm run check:seam`, pre-commit and CI) fails on any import, dynamic import or `require` of a listed client package outside the seam folder
-- Existing violators sit on `.data-seam-baseline.json` (path + import count per file). Counts only shrink: a new file or a higher count fails, and `--baseline` refuses to grow the list. A fresh scaffold starts with it empty
+- Existing violators sit on `.data-seam-baseline.json` (path + import count per file). Counts only shrink: a new file or a higher count fails, and `--baseline` refuses to grow the list. The template's list holds only recorded exceptions: `src/proxy.ts` (session client at the request edge) and `src/lib/require-admin.ts` (copied from content-acceptance)
 - Where the client lives is the rule, not what the database is: "Supabase for everything server-side" is unchanged
 - Module: `modules/data-seam/`
+
 ### State Management
 - Zustand for client state
 - No Redux. No Context for complex state.
