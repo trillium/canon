@@ -127,6 +127,14 @@ The authoritative definition of Trillium's project standard. Every module in `mo
 - Existing comments sit on `.no-comments-baseline.json` (path + count per file). Counts only shrink: a new file or a higher count fails, and `--baseline` refuses to grow the list. A fresh scaffold starts with it empty
 - Module: `modules/no-comments/`
 
+### CSS Normalization (opt-in)
+- Consistent fonts and rendering settings across browsers; this reduces but does not remove OS rasterisation differences (Mac vs Linux glyphs still differ), so pixel baselines are generated on one OS, preferably a native Linux runner without Docker, and other environments use structural checks
+- A normalize stylesheet (`src/app/normalize.css`) is imported by the global CSS, with its element rules in `@layer base` so Tailwind utilities still win: `box-sizing`, `text-size-adjust`, font smoothing, `font-synthesis: style` (no faux bold, italics still render), `tab-size`, form controls inheriting fonts
+- UI text uses self-hosted web fonts declared with `@font-face` (local files, `font-display`), never system fonts; a `* Fallback` face with `size-adjust` and `ascent-override` keeps layout stable while the font loads. `--font-sans` and `--font-mono` (a real monospace font) are overridden so Tailwind's `system-ui` default never applies
+- `scripts/check-css-normalize.mjs` (`pnpm run check:css`, CI) fails on a missing or unimported normalize stylesheet, a `font-family` or `font` shorthand naming a system font or starting with a generic family, remote font hosts, `@font-face` without `font-display` or a local file, and missing font files
+- Visual tests wait for `document.fonts.ready` before capturing
+- Module: `modules/css-normalize/`
+
 ### State Management
 - Zustand for client state
 - No Redux. No Context for complex state.

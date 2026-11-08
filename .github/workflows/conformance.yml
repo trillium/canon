@@ -92,6 +92,17 @@ jobs:
             diff "modules/no-comments/$f" "template/$f"
           done
 
+      - name: Check css-normalize module matches template
+        run: |
+          for f in scripts/check-css-normalize.mjs src/test/check-css-normalize.test.ts \
+            src/app/normalize.css css-normalize.config.json \
+            .github/workflows/css-normalize.yml \
+            public/fonts/Assistant-Regular.woff2 public/fonts/Assistant-Bold.woff2 \
+            public/fonts/JetBrainsMono-Regular.woff2 public/fonts/JetBrainsMono-Bold.woff2 \
+            public/fonts/OFL-NOTICE.txt; do
+            diff "modules/css-normalize/$f" "template/$f"
+          done
+
       - name: Check canon's own rule -> enforcer table
         run: node modules/agent-guardrails/scripts/check-enforcement.mjs --table-only
 
@@ -107,5 +118,6 @@ jobs:
           pnpm run build
           pnpm run check:enforcement
           pnpm run check:comments
+          pnpm run check:css
           pnpm run lint:literals
           pnpm exec vitest --run

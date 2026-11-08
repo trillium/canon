@@ -23,7 +23,8 @@
     "spellcheck": "cspell lint --no-must-find-files '**/*.{md,mdx,ts,tsx}'",
     "check:enforcement": "node scripts/check-enforcement.mjs",
     "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts",
-    "check:comments": "bun scripts/check-comments.ts"
+    "check:comments": "bun scripts/check-comments.ts",
+    "check:css": "node scripts/check-css-normalize.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",

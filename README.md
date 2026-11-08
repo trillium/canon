@@ -65,6 +65,7 @@ canon/
     content-acceptance/
     agent-guardrails/
     no-comments/         # opt-in: bans code comments, shrinking allow-list
+    css-normalize/       # opt-in: CSS reset, self-hosted fonts, no system-font stacks
   template/              # skeleton Next.js app, all modules applied
 ```
 
