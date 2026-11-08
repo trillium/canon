@@ -147,7 +147,7 @@ function readJson<T>(path: string): T | null {
   return existsSync(path) ? (JSON.parse(readFileSync(path, "utf-8")) as T) : null;
 }
 
-export function main(argv: string[]): number {
+function load(argv: string[]) {
   const opt = (name: string) => {
     const i = argv.indexOf(name);
     return i >= 0 ? argv[i + 1] : undefined;
@@ -157,7 +157,18 @@ export function main(argv: string[]): number {
   const config: Config = { ...DEFAULT_CONFIG, ...(readJson<Partial<Config>>(configPath) ?? {}) };
   const baselinePath = join(root, config.baseline);
   const existing = readJson<Baseline>(baselinePath);
-  const { counts, details } = collectCounts(root, config);
+  return { config, baselinePath, existing, ...collectCounts(root, config) };
+}
+
+export function main(argv: string[]): number {
+  let loaded: ReturnType<typeof load>;
+  try {
+    loaded = load(argv);
+  } catch (e) {
+    console.error(`check-data-seam: setup failed: ${(e as Error).message}`);
+    return 2;
+  }
+  const { config, baselinePath, existing, counts, details } = loaded;
 
   if (argv.includes("--baseline")) {
     try {

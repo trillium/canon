@@ -9,7 +9,7 @@ Imports caught: `import`, `import type`, `export ... from`, dynamic `import()` a
 ## Check
 
 - [ ] `scripts/check-data-seam.ts` exists and is byte-identical to this module's copy
-- [ ] `typescript` is in devDependencies (the scanner uses `ts.preProcessFile`)
+- [ ] `typescript` `^5` (below 7) is in devDependencies (the scanner uses `ts.preProcessFile`, which TypeScript 7 removed)
 - [ ] `data-seam.config.json` exists at the project root with `dirs`, `exclude`, `seam`, `packages` and `baseline`, and `seam` names the one folder that holds the client
 - [ ] `.data-seam-baseline.json` exists and is committed
 - [ ] `package.json` has a `"check:seam"` script running `bun scripts/check-data-seam.ts`
@@ -23,7 +23,7 @@ Imports caught: `import`, `import type`, `export ... from`, dynamic `import()` a
 
 ## Apply
 
-1. Run `pnpm add -D typescript` if it is missing.
+1. Run `pnpm add -D typescript@^5` if it is missing or at 7 or above.
 2. Copy `scripts/check-data-seam.ts`, `data-seam.config.json` and `src/test/check-data-seam.test.ts` from this module. Set `seam` to the folder that will hold the client (create it if it does not exist) and `packages` to the client packages the project uses (an ORM instead of supabase-js: change the package names; the structure is the same). List generated files that legitimately import a client under `exclude`.
 3. Add to `package.json`:
    ```json
