@@ -175,7 +175,7 @@ export function checkStyle(file, raw) {
     errors.push(...checkDeclaration(d[2], d[3], `${file}: ${d[2]}`));
     d = declRe.exec(withoutFaces);
   }
-  const imports = [...withoutFaces.matchAll(/@import\s+(?:url\()?["']([^"']+)["']/g)].map(
+  const imports = [...withoutFaces.matchAll(/@import\s+(?:url\(\s*)?["']?([^"')\s;]+)/g)].map(
     (i) => i[1],
   );
   for (const i of imports)
@@ -223,12 +223,12 @@ export function run(root, config = {}) {
   const files = cfg.dirs.flatMap((d) => walk(resolve(root, d)));
   const styles = files.filter((f) => STYLE_EXT.test(f));
   const normalizeBase = cfg.normalize.split("/").pop();
-  const importsNormalize = styles.some((f) => {
-    if (f === normalizePath) return false;
-    return new RegExp(`@import\\s+["'][^"']*${normalizeBase.replace(".", "\\.")}["']`).test(
-      stripComments(readFileSync(f, "utf-8")),
-    );
-  });
+  const importRe = new RegExp(
+    `@import\\s+(?:url\\(\\s*)?["']?(?:[^"')\\s;]*/)?${normalizeBase.replace(".", "\\.")}["')\\s;]`,
+  );
+  const importsNormalize = styles.some(
+    (f) => f !== normalizePath && importRe.test(stripComments(readFileSync(f, "utf-8"))),
+  );
   if (existsSync(normalizePath) && !importsNormalize)
     errors.push(`${normalizeBase} is never imported by a stylesheet`);
 

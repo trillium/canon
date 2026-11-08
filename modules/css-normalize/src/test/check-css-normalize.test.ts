@@ -90,6 +90,21 @@ describe("check-css-normalize", () => {
     expect(run(root).join("\n")).toContain("never imported");
   });
 
+  it("accepts the url() import forms", () => {
+    for (const form of ['url("./normalize.css")', "url(./normalize.css)"]) {
+      const globals = `@import "tailwindcss";\n@import ${form};\n`;
+      const root = project({ "src/app/globals.css": globals });
+      expect(run(root)).toEqual([]);
+    }
+  });
+
+  it("fails on an unquoted url() import of a remote font stylesheet", () => {
+    const root = project({
+      "src/app/x.css": "@import url(https://fonts.example.com/font.css);",
+    });
+    expect(run(root).join("\n")).toContain("remote font stylesheet");
+  });
+
   it("fails on a system font in a font shorthand", () => {
     const css = project({ "src/app/x.css": "p { font: 700 14px/1.4 Arial, sans-serif; }" });
     expect(run(css).join("\n")).toContain('system font "arial"');

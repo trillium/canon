@@ -26,7 +26,7 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | Prose is spell-checked | lint | `modules/spellcheck/cspell.json` | - |
 | Migration numbers are allocated, not hand-picked | structure | `modules/migration-allocator/next-migration.sh` | - |
 | Code comments are banned; intent lives in names, types and tests | lint | `modules/no-comments/scripts/check-comments.ts`, `modules/no-comments/.github/workflows/no-comments.yml` | - |
-| CSS is normalized across browsers and platforms; fonts are self-hosted; no system-font stacks | lint | `modules/css-normalize/scripts/check-css-normalize.mjs`, `modules/css-normalize/.github/workflows/css-normalize.yml` | - |
+| CSS is normalized across browsers; fonts are self-hosted; no system-font stacks (reduces but does not remove OS rasterisation differences) | lint | `modules/css-normalize/scripts/check-css-normalize.mjs`, `modules/css-normalize/.github/workflows/css-normalize.yml` | - |
 | The template has an agent instruction file that points at its enforcement table | ci | `modules/agent-guardrails/scripts/check-enforcement.mjs`, `template/ENFORCEMENT.md` | - |
 
 ## What Canon enforces on itself
