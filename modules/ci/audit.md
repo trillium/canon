@@ -9,6 +9,7 @@
   - [ ] Job: unit tests (`vitest run`)
   - [ ] Job: build (`next build`)
   - [ ] Job: design system (`pnpm run check:ds`, needs `oven-sh/setup-bun`; applies when the design-system module is active)
+  - [ ] Step in lint job: page frame (`pnpm run check:page-frame`; applies when the styling module is active, needs its `scripts/check-page-frame.mjs` and `package.json` script)
   - [ ] Job: enforcement table (`pnpm run check:enforcement`; applies when the agent-guardrails module is active)
   - [ ] All jobs run in parallel
 - [ ] `accessibility.yml` — a11y workflow on pull requests

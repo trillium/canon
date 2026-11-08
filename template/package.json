@@ -24,7 +24,8 @@
     "check:enforcement": "node scripts/check-enforcement.mjs",
     "check:ds": "bun scripts/check-design-system.ts --all && bun scripts/check-ds-coverage.ts && bun scripts/check-ds-page.ts",
     "check:comments": "bun scripts/check-comments.ts",
-    "check:css": "node scripts/check-css-normalize.mjs"
+    "check:css": "node scripts/check-css-normalize.mjs",
+    "check:page-frame": "node scripts/check-page-frame.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",

@@ -71,6 +71,9 @@ jobs:
             diff "modules/design-system/$f" "template/$f"
           done
 
+      - name: Check styling scripts/check-page-frame.mjs matches template
+        run: diff modules/styling/scripts/check-page-frame.mjs template/scripts/check-page-frame.mjs
+
       - name: Check every module has an audit.md with Check, Apply and Conflicts sections
         run: |
           for f in modules/*/audit.md; do
@@ -119,5 +122,6 @@ jobs:
           pnpm run check:enforcement
           pnpm run check:comments
           pnpm run check:css
+          pnpm run check:page-frame
           pnpm run lint:literals
           pnpm exec vitest --run
