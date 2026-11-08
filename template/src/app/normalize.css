@@ -23,54 +23,72 @@
   line-gap-override: 0%;
 }
 
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-sans: "Assistant", "Assistant Fallback", sans-serif;
-  --font-mono: "Assistant", "Assistant Fallback", monospace;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  -moz-tab-size: 4;
-  tab-size: 4;
-  font-kerning: normal;
-  font-synthesis: none;
-  text-rendering: geometricPrecision;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    font-kerning: normal;
+    font-synthesis: style;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-body {
-  margin: 0;
-  line-height: 1.5;
-}
+  body {
+    margin: 0;
+    line-height: 1.5;
+  }
 
-button,
-input,
-select,
-textarea,
-optgroup {
-  font: inherit;
-  letter-spacing: inherit;
-  color: inherit;
-  margin: 0;
-}
+  button,
+  input,
+  select,
+  textarea,
+  optgroup {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    margin: 0;
+  }
 
-img,
-svg,
-video,
-canvas {
-  display: block;
-  max-width: 100%;
-}
+  img,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
 
-table {
-  border-collapse: collapse;
+  table {
+    border-collapse: collapse;
+  }
 }

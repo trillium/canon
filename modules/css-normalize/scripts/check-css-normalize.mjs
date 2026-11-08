@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SYSTEM_FONTS = new Set([
   "system-ui",
@@ -57,10 +58,15 @@ const REQUIRED_NORMALIZE = [
   [/text-size-adjust\s*:\s*100%/, "text-size-adjust: 100%"],
   [/-webkit-font-smoothing\s*:\s*antialiased/, "-webkit-font-smoothing: antialiased"],
   [/-moz-osx-font-smoothing\s*:\s*grayscale/, "-moz-osx-font-smoothing: grayscale"],
-  [/font-synthesis\s*:\s*none/, "font-synthesis: none"],
+  [/font-synthesis\s*:\s*style\b/, "font-synthesis: style"],
   [/tab-size\s*:/, "tab-size"],
   [/font\s*:\s*inherit/, "font: inherit on form controls"],
+  [/@layer\s+base\s*\{/, "@layer base around the element rules"],
 ];
+
+const SYSTEM_KEYWORDS = /^(caption|icon|menu|message-box|small-caption|status-bar)$/i;
+const SHORTHAND_FAMILY =
+  /(?:^|\s)(?:[\d.]+(?:px|r?em|%|pt|pc|vw|vh|vmin|vmax|ch|ex|r?lh|cm|mm|in|q)|(?:xxx-|xx-|x-)?(?:small|large)|medium|larger|smaller)(?:\s*\/\s*\S+)?\s+(.+)$/i;
 
 const STYLE_EXT = /\.(css|scss|pcss)$/;
 const CODE_EXT = /\.(tsx?|jsx?|mjs|cjs|html|mdx)$/;
@@ -122,6 +128,18 @@ export function checkFamilyValue(value, where) {
   return errors;
 }
 
+export function checkFontShorthand(value, where) {
+  const v = value.replace(/!important/g, "").trim();
+  if (SYSTEM_KEYWORDS.test(v))
+    return [`${where}: system font keyword "${v}"; load a self-hosted font`];
+  const family = SHORTHAND_FAMILY.exec(v)?.[1];
+  return family ? checkFamilyValue(family, where) : [];
+}
+
+function checkDeclaration(prop, value, where) {
+  return prop === "font" ? checkFontShorthand(value, where) : checkFamilyValue(value, where);
+}
+
 export function checkStyle(file, raw) {
   const errors = [];
   const css = stripComments(raw);
@@ -151,10 +169,10 @@ export function checkStyle(file, raw) {
     m = faceRe.exec(css);
   }
   const withoutFaces = css.replace(/@font-face\s*\{[^}]*\}/g, "");
-  const declRe = /(^|[;{\s])(font-family|--font-[\w-]+)\s*:\s*([^;}]+)/g;
+  const declRe = /(^|[;{\s])(font-family|font|--font-[\w-]+)\s*:\s*([^;}]+)/g;
   let d = declRe.exec(withoutFaces);
   while (d) {
-    errors.push(...checkFamilyValue(d[3], `${file}: ${d[2]}`));
+    errors.push(...checkDeclaration(d[2], d[3], `${file}: ${d[2]}`));
     d = declRe.exec(withoutFaces);
   }
   const imports = [...withoutFaces.matchAll(/@import\s+(?:url\()?["']([^"']+)["']/g)].map(
@@ -168,10 +186,10 @@ export function checkStyle(file, raw) {
 
 export function checkCode(file, src) {
   const errors = [];
-  const re = /(?:fontFamily|font-family)["']?\s*:\s*(["'`])([\s\S]*?)\1/g;
+  const re = /\b(fontFamily|font-family|font)["']?\s*:\s*(["'`])([\s\S]*?)\2/g;
   let m = re.exec(src);
   while (m) {
-    errors.push(...checkFamilyValue(m[2], `${file}: fontFamily`));
+    errors.push(...checkDeclaration(m[1], m[3], `${file}: ${m[1]}`));
     m = re.exec(src);
   }
   if (/fonts\.(googleapis|gstatic)\.com|use\.typekit\.net|fonts\.bunny\.net/.test(src))
@@ -208,14 +226,11 @@ export function run(root, config = {}) {
   const importsNormalize = styles.some((f) => {
     if (f === normalizePath) return false;
     return new RegExp(`@import\\s+["'][^"']*${normalizeBase.replace(".", "\\.")}["']`).test(
-      readFileSync(f, "utf-8"),
+      stripComments(readFileSync(f, "utf-8")),
     );
   });
-  const layoutImports = files
-    .filter((f) => /\.(tsx?|jsx?)$/.test(f))
-    .some((f) => readFileSync(f, "utf-8").includes(normalizeBase));
-  if (existsSync(normalizePath) && !importsNormalize && !layoutImports)
-    errors.push(`${normalizeBase} is never imported by a stylesheet or layout`);
+  if (existsSync(normalizePath) && !importsNormalize)
+    errors.push(`${normalizeBase} is never imported by a stylesheet`);
 
   for (const f of styles)
     errors.push(...checkStyle(f.slice(resolve(root).length + 1), readFileSync(f, "utf-8")));
@@ -233,7 +248,7 @@ export function run(root, config = {}) {
   return errors;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   const root = process.cwd();
   const cfgPath = resolve(root, "css-normalize.config.json");
   const config = existsSync(cfgPath) ? JSON.parse(readFileSync(cfgPath, "utf-8")) : {};

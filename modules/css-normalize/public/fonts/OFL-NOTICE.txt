@@ -1,3 +1,5 @@
 Assistant is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org).
 Copyright 2018 The Assistant Project Authors (https://github.com/hafontia-zz/Assistant).
+JetBrains Mono is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org).
+Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono).
 Replace these files with your project's own typeface; keep the license notice of whatever you ship.

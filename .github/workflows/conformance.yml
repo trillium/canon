@@ -97,7 +97,9 @@ jobs:
           for f in scripts/check-css-normalize.mjs src/test/check-css-normalize.test.ts \
             src/app/normalize.css css-normalize.config.json \
             .github/workflows/css-normalize.yml \
-            public/fonts/Assistant-Regular.woff2 public/fonts/Assistant-Bold.woff2 public/fonts/OFL-NOTICE.txt; do
+            public/fonts/Assistant-Regular.woff2 public/fonts/Assistant-Bold.woff2 \
+            public/fonts/JetBrainsMono-Regular.woff2 public/fonts/JetBrainsMono-Bold.woff2 \
+            public/fonts/OFL-NOTICE.txt; do
             diff "modules/css-normalize/$f" "template/$f"
           done
 

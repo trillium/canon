@@ -1,6 +1,7 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { copyFileSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { run } from "../../scripts/check-css-normalize.mjs";
 
@@ -8,9 +9,11 @@ const GOOD_NORMALIZE = `
 @font-face { font-family: "Brand"; src: url("/fonts/b.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Brand Fallback"; src: local("Arial"); size-adjust: 100%; ascent-override: 90%; }
 @theme { --font-sans: "Brand", "Brand Fallback", sans-serif; }
-*, *::before, *::after { box-sizing: border-box; }
-html { text-size-adjust: 100%; tab-size: 4; font-synthesis: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-button { font: inherit; }
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { text-size-adjust: 100%; tab-size: 4; font-synthesis: style; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  button { font: inherit; }
+}
 `;
 
 function project(files: Record<string, string>) {
@@ -70,6 +73,47 @@ describe("check-css-normalize", () => {
       "src/app/normalize.css": GOOD_NORMALIZE.replace("/fonts/b.woff2", "/fonts/missing.woff2"),
     });
     expect(run(root).join("\n")).toContain("not found");
+  });
+
+  it("fails when the element rules are not in @layer base", () => {
+    const root = project({
+      "src/app/normalize.css": GOOD_NORMALIZE.replace("@layer base {", "@media all {"),
+    });
+    expect(run(root).join("\n")).toContain("@layer base");
+  });
+
+  it("fails when only a test file mentions normalize.css", () => {
+    const root = project({
+      "src/app/globals.css": '@import "tailwindcss";\n',
+      "src/test/x.test.ts": 'const css = \'@import "./normalize.css";\'; import "./normalize.css";',
+    });
+    expect(run(root).join("\n")).toContain("never imported");
+  });
+
+  it("fails on a system font in a font shorthand", () => {
+    const css = project({ "src/app/x.css": "p { font: 700 14px/1.4 Arial, sans-serif; }" });
+    expect(run(css).join("\n")).toContain('system font "arial"');
+    const keyword = project({ "src/app/x.css": "p { font: menu; }" });
+    expect(run(keyword).join("\n")).toContain("system font keyword");
+    const tsx = project({ "src/a.tsx": 'export const s = { font: "12px system-ui" };' });
+    expect(run(tsx).join("\n")).toContain('system font "system-ui"');
+  });
+
+  it("allows a font shorthand without a system font", () => {
+    const root = project({
+      "src/app/x.css": "p { font: italic 1rem var(--font-sans); } q { font: inherit; }",
+    });
+    expect(run(root)).toEqual([]);
+  });
+
+  it("runs the CLI from a path containing a space", () => {
+    const root = project({ "src/app/x.css": "p { font-family: system-ui; }" });
+    const script = join(root, "dir with space", "check-css-normalize.mjs");
+    mkdirSync(dirname(script), { recursive: true });
+    copyFileSync(resolve(__dirname, "../../scripts/check-css-normalize.mjs"), script);
+    const res = spawnSync(process.execPath, [script], { cwd: root, encoding: "utf-8" });
+    expect(res.status).toBe(1);
+    expect(res.stderr).toContain("check:css failed");
   });
 
   it("allows var() references", () => {
