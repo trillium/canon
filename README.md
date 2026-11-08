@@ -67,6 +67,7 @@ canon/
     no-comments/         # opt-in: bans code comments, shrinking allow-list
     css-normalize/       # opt-in: CSS reset, self-hosted fonts, no system-font stacks
   template/              # skeleton Next.js app, all modules applied
+  examples/starter/      # runnable starter app with all checks and CI, see examples/README.md
 ```
 
 ## Contributing Back

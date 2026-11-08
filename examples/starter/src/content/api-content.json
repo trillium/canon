@@ -1,0 +1,6 @@
+{
+  "acceptBodyInvalid": "Provide {path, value} to accept a field",
+  "unacceptBodyInvalid": "Provide {path}",
+  "pageNotFound": "Page not found: {page}",
+  "valueDiffers": "Stored value of {field} differs from the value sent"
+}

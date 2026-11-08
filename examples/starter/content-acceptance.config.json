@@ -1,0 +1,5 @@
+{
+  "sourceDir": "src",
+  "contentDir": "src/content",
+  "skipRoutes": ["/admin", "/admin/callback", "/design-system"]
+}
