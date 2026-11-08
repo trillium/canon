@@ -1,0 +1,5 @@
+{
+  "dirs": ["src"],
+  "normalize": "src/app/normalize.css",
+  "fontsDir": "public"
+}

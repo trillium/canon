@@ -1,0 +1,76 @@
+@font-face {
+  font-family: "Assistant";
+  src: url("/fonts/Assistant-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Assistant";
+  src: url("/fonts/Assistant-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Assistant Fallback";
+  src: local("Arial");
+  size-adjust: 103%;
+  ascent-override: 100%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+@theme {
+  --font-sans: "Assistant", "Assistant Fallback", sans-serif;
+  --font-mono: "Assistant", "Assistant Fallback", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-kerning: normal;
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea,
+optgroup {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+}

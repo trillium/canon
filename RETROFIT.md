@@ -103,7 +103,8 @@ Apply modules in this order to avoid dependency issues:
 11. `errors` — independent, safe to add anytime
 12. `content-acceptance` — only for projects with editable copy; database variant depends on auth
 13. `no-comments` — opt-in; apply only when the project wants comments banned. Baseline existing comments, then sweep them
-14. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
+14. `css-normalize` — opt-in; apply when the project has visual tests or wants identical rendering across Mac, Linux and CI. Replace system-font stacks with a self-hosted font
+15. `agent-guardrails` — apply last: its table names the enforcers the other modules just installed
 
 ## Notes
 

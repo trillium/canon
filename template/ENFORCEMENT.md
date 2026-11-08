@@ -23,4 +23,5 @@ Kinds: `structure` (the mistake cannot be written), `lint`, `hook`, `ci`, `test`
 | Next.js 16: `proxy.ts`, never `middleware.ts` | hook | `.husky/pre-commit` | - |
 | Prose and identifiers are spell-checked | lint | `cspell.json` | - |
 | Code comments are banned except directives, license headers and external-fact citations; the allow-list only shrinks | lint | `scripts/check-comments.ts`, `.github/workflows/no-comments.yml` | - |
+| CSS is normalized across browsers and platforms: a normalize stylesheet, self-hosted fonts with explicit metrics, no system-font stacks, so rendering is identical on Mac, Linux and CI | lint | `scripts/check-css-normalize.mjs`, `.github/workflows/css-normalize.yml` | - |
 | Every rule above has an enforcer that exists; no exception has expired | ci | `scripts/check-enforcement.mjs`, `.github/workflows/ci.yml` | - |
