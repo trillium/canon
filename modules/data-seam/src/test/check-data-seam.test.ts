@@ -74,7 +74,8 @@ describe("baseline", () => {
   });
 });
 
-describe("cli", () => {
+// Each test spawns bun several times; a cold runner can exceed the 5s default.
+describe("cli", { timeout: 20000 }, () => {
   const script = resolve(process.cwd(), "scripts/check-data-seam.ts");
   const importClient = 'import { createClient } from "@supabase/supabase-js";\n';
   let root: string;
