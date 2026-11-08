@@ -106,6 +106,13 @@ jobs:
             diff "modules/css-normalize/$f" "template/$f"
           done
 
+      - name: Check data-seam module matches template
+        run: |
+          for f in scripts/check-data-seam.ts src/test/check-data-seam.test.ts \
+            .github/workflows/data-seam.yml data-seam.config.json; do
+            diff "modules/data-seam/$f" "template/$f"
+          done
+
       - name: Check canon's own rule -> enforcer table
         run: node modules/agent-guardrails/scripts/check-enforcement.mjs --table-only
 
@@ -123,5 +130,6 @@ jobs:
           pnpm run check:comments
           pnpm run check:css
           pnpm run check:page-frame
+          pnpm run check:seam
           pnpm run lint:literals
           pnpm exec vitest --run

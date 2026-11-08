@@ -1,0 +1,7 @@
+{
+  "dirs": ["src", "e2e"],
+  "exclude": [],
+  "seam": "src/lib/supabase",
+  "packages": ["@supabase/supabase-js", "@supabase/ssr"],
+  "baseline": ".data-seam-baseline.json"
+}
